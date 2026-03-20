@@ -1,0 +1,61 @@
+---
+// Team.astro
+
+const team = [
+  {
+    name: "Alice Chen",
+    role: "Co-founder & CEO",
+    bio: "Previously at [Company]. Built [something relevant]. Obsessed with [the problem you're solving].",
+    initials: "AC",
+    color: "bg-violet-100 text-violet-600",
+    // Replace with: avatar: "/team/alice.jpg"
+  },
+  {
+    name: "Ben Torres",
+    role: "Co-founder & CTO",
+    bio: "Ex-[Company] engineer. Built [relevant thing]. [Years] years working on [domain].",
+    initials: "BT",
+    color: "bg-sky-100 text-sky-600",
+    // Replace with: avatar: "/team/ben.jpg"
+  },
+  {
+    name: "Sara Kim",
+    role: "Head of Design",
+    bio: "Designed products at [Company] used by [X] people. Passionate about [relevant topic].",
+    initials: "SK",
+    color: "bg-emerald-100 text-emerald-600",
+    // Replace with: avatar: "/team/sara.jpg"
+  },
+];
+---
+
+<section id="team" class="py-24 px-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Section label -->
+    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">The team</p>
+
+    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-xl leading-snug">
+      Built by people who lived this problem.
+    </h2>
+    <p class="mt-4 text-gray-500 max-w-xl">
+      One sentence about why this team is uniquely positioned to solve this.
+    </p>
+
+    <!-- Team cards -->
+    <div class="mt-14 grid md:grid-cols-3 gap-6">
+      {team.map((member) => (
+        <div class="bg-white rounded-xl p-6 border border-gray-100">
+          <!-- Avatar: swap the div below for <img> once you have photos -->
+          <div class={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm mb-4 ${member.color}`}>
+            {member.initials}
+          </div>
+          <h3 class="font-semibold text-gray-900">{member.name}</h3>
+          <p class="text-xs text-brand-500 font-medium mt-0.5 mb-3">{member.role}</p>
+          <p class="text-sm text-gray-500 leading-relaxed">{member.bio}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,67 @@
+---
+// Product.astro
+
+const features = [
+  {
+    title: "Feature one",
+    description: "What it does and why it matters. One or two sentences max.",
+  },
+  {
+    title: "Feature two",
+    description: "Focus on the outcome for the user, not the technical detail.",
+  },
+  {
+    title: "Feature three",
+    description: "What can they do now that they couldn't do before?",
+  },
+  {
+    title: "Feature four",
+    description: "Keep these tight. If you need more than two sentences, you're explaining too much.",
+  },
+];
+---
+
+<section id="product" class="py-24 px-6">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Section label -->
+    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">The product</p>
+
+    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
+      What YourProduct actually does.
+    </h2>
+    <p class="mt-4 text-gray-500 max-w-xl">
+      A one-paragraph summary of your product. Think of this as your elevator pitch in written form.
+    </p>
+
+    <!-- Product screenshot placeholder -->
+    <div class="mt-12 rounded-2xl border border-gray-200 bg-gray-50 overflow-hidden">
+      <div class="h-10 bg-white border-b border-gray-100 flex items-center px-4 gap-2">
+        <span class="w-3 h-3 rounded-full bg-red-300"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-300"></span>
+        <span class="w-3 h-3 rounded-full bg-green-300"></span>
+        <span class="ml-4 text-xs text-gray-400 font-mono">app.yourstartup.com</span>
+      </div>
+      <!-- Replace this div with an <img src="/screenshot.png" alt="..." /> once you have a screenshot -->
+      <div class="h-72 md:h-96 flex items-center justify-center">
+        <p class="text-gray-400 text-sm font-mono">[ Replace with your product screenshot ]</p>
+      </div>
+    </div>
+
+    <!-- Feature grid -->
+    <div class="mt-16 grid md:grid-cols-2 gap-x-12 gap-y-10">
+      {features.map((f, i) => (
+        <div class="flex gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-500 font-semibold text-sm font-mono">
+            {String(i + 1).padStart(2, '0')}
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">{f.title}</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

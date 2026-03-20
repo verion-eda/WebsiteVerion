@@ -1,0 +1,48 @@
+---
+// Problem.astro
+
+const problems = [
+  {
+    icon: "⏳",
+    title: "Problem one",
+    description: "Describe a real pain point your target user feels. Be specific — use language they would use themselves.",
+  },
+  {
+    icon: "🔧",
+    title: "Problem two",
+    description: "Another frustration they deal with today. The more concrete, the more credible.",
+  },
+  {
+    icon: "💸",
+    title: "Problem three",
+    description: "What is the cost of the current situation? Time wasted, money lost, opportunity missed?",
+  },
+];
+---
+
+<section id="problem" class="py-24 px-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Section label -->
+    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">The problem</p>
+
+    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
+      Why the status quo isn't working.
+    </h2>
+    <p class="mt-4 text-gray-500 max-w-xl">
+      A brief framing of the world before your product. What are people stuck doing today?
+    </p>
+
+    <!-- Problem cards -->
+    <div class="mt-14 grid md:grid-cols-3 gap-6">
+      {problems.map((p) => (
+        <div class="bg-white rounded-xl p-6 border border-gray-100">
+          <div class="text-2xl mb-4">{p.icon}</div>
+          <h3 class="font-semibold text-gray-900 mb-2">{p.title}</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">{p.description}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
