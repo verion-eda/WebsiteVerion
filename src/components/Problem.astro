@@ -1,21 +1,36 @@
 ---
-// Problem.astro
+// Problem.astro — USP cards + Who It's For
 
-const problems = [
+const usps = [
   {
-    icon: "⏳",
-    title: "Problem one",
-    description: "Describe a real pain point your target user feels. Be specific — use language they would use themselves.",
+    icon: "⚡",
+    title: "10x – 50x Faster",
+    description: "Faster than VCS and Xcelium. More regression cycles before tape-out.",
   },
   {
-    icon: "🔧",
-    title: "Problem two",
-    description: "Another frustration they deal with today. The more concrete, the more credible.",
+    icon: "🔒",
+    title: "Your IP, Your Infrastructure",
+    description: "On-premise or cloud. Your design data never leaves your control.",
   },
   {
-    icon: "💸",
-    title: "Problem three",
-    description: "What is the cost of the current situation? Time wasted, money lost, opportunity missed?",
+    icon: "🔍",
+    title: "Full Visibility",
+    description: "Full debug traces and coverage metrics. No FPGA black boxes.",
+  },
+];
+
+const audiences = [
+  {
+    label: "IC & Silicon Startups",
+    description: "Emulator-grade performance without the $5M–$10M CapEx. Scale on cloud GPUs, pay as you go.",
+  },
+  {
+    label: "Fabless Design Teams",
+    description: "Shrink your regression wall. Run more iterations before tape-out.",
+  },
+  {
+    label: "Hyperscalers",
+    description: "Your GPU cluster sits idle between AI jobs. Put it to work on chip verification.",
   },
 ];
 ---
@@ -24,24 +39,37 @@ const problems = [
   <div class="max-w-5xl mx-auto">
 
     <!-- Section label -->
-    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">The problem</p>
+    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Why Verion</p>
 
     <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
-      Why the status quo isn't working.
+      The simulation performance modern chip design demands.
     </h2>
     <p class="mt-4 text-gray-500 max-w-xl">
-      A brief framing of the world before your product. What are people stuck doing today?
+      Built for the pace of modern semiconductor development.
     </p>
 
-    <!-- Problem cards -->
+    <!-- USP cards -->
     <div class="mt-14 grid md:grid-cols-3 gap-6">
-      {problems.map((p) => (
+      {usps.map((u) => (
         <div class="bg-white rounded-xl p-6 border border-gray-100">
-          <div class="text-2xl mb-4">{p.icon}</div>
-          <h3 class="font-semibold text-gray-900 mb-2">{p.title}</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">{p.description}</p>
+          <div class="text-2xl mb-4">{u.icon}</div>
+          <h3 class="font-semibold text-gray-900 mb-2">{u.title}</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">{u.description}</p>
         </div>
       ))}
+    </div>
+
+    <!-- Who It's For -->
+    <div class="mt-20">
+      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Who it's for</p>
+      <div class="grid md:grid-cols-3 gap-6">
+        {audiences.map((a) => (
+          <div class="border-l-2 border-brand-500 pl-5">
+            <h3 class="font-semibold text-gray-900 mb-1">{a.label}</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">{a.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
 
   </div>

@@ -5,18 +5,16 @@ const team = [
   {
     name: "Daniel Kiesewalter",
     role: "Co-founder",
-    bio: "Previously at [Company]. Built [something relevant]. Obsessed with [the problem you're solving].",
+    bio: "Sony AI chip design engineer. Deep expertise in semiconductor verification and hardware architecture.",
     initials: "DK",
     color: "bg-violet-100 text-violet-600",
-    // Replace with: avatar: "/team/alice.jpg"
   },
   {
     name: "Yves Inneichen",
     role: "Co-founder",
-    bio: "Ex-[Company] engineer. Built [relevant thing]. [Years] years working on [domain].",
+    bio: "ACM Gordon Bell Prize winner. Background in high-performance computing and GPU-accelerated systems.",
     initials: "YI",
     color: "bg-sky-100 text-sky-600",
-    // Replace with: avatar: "/team/ben.jpg"
   },
 ];
 ---
@@ -31,11 +29,11 @@ const team = [
       Built by people who lived this problem.
     </h2>
     <p class="mt-4 text-gray-500 max-w-xl">
-      One sentence about why this team is uniquely positioned to solve this.
+      An ACM Gordon Bell Prize winner and a Sony AI chip design engineer — building the tools they wished they had.
     </p>
 
     <!-- Team cards -->
-    <div class="mt-14 grid md:grid-cols-3 gap-6">
+    <div class="mt-14 grid md:grid-cols-2 gap-6 max-w-2xl">
       {team.map((member) => (
         <div class="bg-white rounded-xl p-6 border border-gray-100">
           <!-- Avatar: swap the div below for <img> once you have photos -->

@@ -1,23 +1,36 @@
 ---
-// Product.astro
+// Product.astro — How It Works + Comparison Table + Features + Integration + Roadmap
 
 const features = [
   {
-    title: "Feature one",
-    description: "What it does and why it matters. One or two sentences max.",
+    title: "Cycle-Accurate Simulation",
+    description: "Full-cycle, cycle-accurate simulation with multi-GPU scaling.",
   },
   {
-    title: "Feature two",
-    description: "Focus on the outcome for the user, not the technical detail.",
+    title: "Fast Compile & Iterate",
+    description: "Fast compile times, save/restore, and dynamic stimulus reconfiguration — one compiled graph runs different stims.",
   },
   {
-    title: "Feature three",
-    description: "What can they do now that they couldn't do before?",
+    title: "Coverage Out of the Box",
+    description: "Code coverage and functional coverage metrics built in. No extra tooling required.",
   },
   {
-    title: "Feature four",
-    description: "Keep these tight. If you need more than two sentences, you're explaining too much.",
+    title: "Open Ecosystem",
+    description: "Verion's API is open source — inspect it, build on it, trust it. No vendor lock-in, no black box.",
   },
+];
+
+const integration = [
+  { label: "Interfaces", items: "DPI, VPI, SCE-MI, UVM" },
+  { label: "APIs", items: "Python, Rust, C++" },
+  { label: "Hardware", items: "Nvidia, AMD, Apple Metal — or any cloud GPU provider" },
+];
+
+const roadmap = [
+  "SVA support",
+  "Intelligent coverage optimization",
+  "Dynamic performance optimizer",
+  "Autonomous Verification (RL-based test generation)",
 ];
 ---
 
@@ -25,42 +38,113 @@ const features = [
   <div class="max-w-5xl mx-auto">
 
     <!-- Section label -->
-    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Verion RTL Simulator</p>
+    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">How it works</p>
 
     <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
-      What YourProduct actually does.
+      GPU-native simulation.<br />No design rewrites required.
     </h2>
-    <p class="mt-4 text-gray-500 max-w-xl">
-      A one-paragraph summary of your product. Think of this as your elevator pitch in written form.
+    <p class="mt-4 text-gray-500 max-w-2xl">
+      Verion's compiler automatically maps standard Verilog/SystemVerilog onto GPU clusters. We solved the synchronization problem that made GPUs impractical for RTL simulation: the irregular branching of chip logic is efficiently partitioned and parallelized, unlocking GPU throughput that legacy CPU simulators cannot match.
     </p>
 
-    <!-- Product screenshot placeholder -->
-    <div class="mt-12 rounded-2xl border border-gray-200 bg-gray-50 overflow-hidden">
-      <div class="h-10 bg-white border-b border-gray-100 flex items-center px-4 gap-2">
-        <span class="w-3 h-3 rounded-full bg-red-300"></span>
-        <span class="w-3 h-3 rounded-full bg-yellow-300"></span>
-        <span class="w-3 h-3 rounded-full bg-green-300"></span>
-        <span class="ml-4 text-xs text-gray-400 font-mono">app.yourstartup.com</span>
-      </div>
-      <!-- Replace this div with an <img src="/screenshot.png" alt="..." /> once you have a screenshot -->
-      <div class="h-72 md:h-96 flex items-center justify-center">
-        <p class="text-gray-400 text-sm font-mono">[ Replace with your product screenshot ]</p>
+    <!-- Comparison Table -->
+    <div class="mt-14 rounded-2xl border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200">
+              <th class="text-left px-6 py-4 font-medium text-gray-500"></th>
+              <th class="text-left px-6 py-4 font-medium text-gray-500">CPU Simulator</th>
+              <th class="text-left px-6 py-4 font-medium text-gray-500">FPGA Emulator</th>
+              <th class="text-left px-6 py-4 font-medium text-brand-600 bg-brand-50">Verion</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">Speed</td>
+              <td class="px-6 py-3.5 text-gray-500">Baseline</td>
+              <td class="px-6 py-3.5 text-gray-500">Fast</td>
+              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">10x–50x faster</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">Compile time</td>
+              <td class="px-6 py-3.5 text-gray-500">Fast</td>
+              <td class="px-6 py-3.5 text-gray-500">Hours</td>
+              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">Fast</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">Debug traces</td>
+              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
+              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
+              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">On-premise</td>
+              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
+              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
+              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">Cloud scaling</td>
+              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
+              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
+              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-3.5 font-medium text-gray-700">Cost</td>
+              <td class="px-6 py-3.5 text-gray-500">Low</td>
+              <td class="px-6 py-3.5 text-gray-500">$5–10M CapEx</td>
+              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">OpEx, no hardware</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Feature grid -->
-    <div class="mt-16 grid md:grid-cols-2 gap-x-12 gap-y-10">
-      {features.map((f, i) => (
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-500 font-semibold text-sm font-mono">
-            {String(i + 1).padStart(2, '0')}
+    <div class="mt-20">
+      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-8">Performance &amp; Observability</p>
+      <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+        {features.map((f, i) => (
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-500 font-semibold text-sm font-mono">
+              {String(i + 1).padStart(2, '0')}
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-1">{f.title}</h3>
+              <p class="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+            </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">{f.title}</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+        ))}
+      </div>
+    </div>
+
+    <!-- Integration -->
+    <div class="mt-20">
+      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Integration</p>
+      <h3 class="text-2xl font-semibold text-gray-900 mb-2">Drop into your existing flow.</h3>
+      <p class="text-gray-500 mb-8 max-w-xl">No rewrites. Works with the interfaces, languages, and hardware you already use.</p>
+      <div class="grid md:grid-cols-3 gap-6">
+        {integration.map((ig) => (
+          <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+            <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-2">{ig.label}</p>
+            <p class="text-sm text-gray-700 font-mono leading-relaxed">{ig.items}</p>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="mt-20">
+      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Roadmap</p>
+      <div class="flex flex-wrap gap-3">
+        {roadmap.map((item) => (
+          <span class="inline-flex items-center gap-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 px-4 py-2 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+            {item}
+          </span>
+        ))}
+      </div>
     </div>
 
   </div>
