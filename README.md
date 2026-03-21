@@ -31,43 +31,37 @@ src/
     └── index.astro          ← Assembles everything
 ```
 
-## Customizing content
-
-Every piece of text is clearly marked with placeholder copy. Work through each file top to bottom:
-
-1. **Nav.astro** — change "YourStartup" to your name
-2. **Hero.astro** — headline, sub-headline, CTA text
-3. **Problem.astro** — edit the `problems` array (title, description, icon)
-4. **Product.astro** — edit the `features` array; drop in a screenshot
-5. **Team.astro** — edit the `team` array; add real photos
-6. **Waitlist.astro** — swap the Formspree URL with your actual form endpoint
-7. **Footer.astro** — update email and social links
-
 ## Adding your product screenshot
 
 In `Product.astro`, replace the placeholder `<div>` with:
+
 ```astro
 <img src="/screenshot.png" alt="YourProduct interface" class="w-full" />
 ```
+
 Then drop `screenshot.png` in the `/public` folder.
 
 ## Adding team photos
 
 In `Team.astro`, replace the initials `<div>` with:
+
 ```astro
 <img src="/team/alice.jpg" alt="Alice Chen" class="w-12 h-12 rounded-full object-cover mb-4" />
 ```
+
 Drop photos in `/public/team/`.
 
 ## Deploying (free)
 
 **Vercel:**
+
 ```bash
 npm i -g vercel
 vercel
 ```
 
 **Netlify:**
+
 - Push to GitHub
 - Go to netlify.com → "New site from Git"
 - Build command: `npm run build`
@@ -83,4 +77,4 @@ vercel
 ## Changing the brand color
 
 In `tailwind.config.mjs`, edit the `brand` color values.
-The current color is a clean indigo blue (`#3b5bdb`).
+The current color is a clean carmine red (`#960018`).
