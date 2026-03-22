@@ -1,76 +1,100 @@
 ---
-// Problem.astro — USP cards + Who It's For
+// Problem.astro
 
 const usps = [
-  {
-    icon: "⚡",
-    title: "10x – 50x Faster",
-    description: "Faster than VCS and Xcelium. More regression cycles before tape-out.",
-  },
-  {
-    icon: "🔒",
-    title: "Your IP, Your Infrastructure",
-    description: "On-premise or cloud. Your design data never leaves your control.",
-  },
-  {
-    icon: "🔍",
-    title: "Full Visibility",
-    description: "Full debug traces and coverage metrics. No FPGA black boxes.",
-  },
+    {
+        title: "10x – 50x faster",
+        description:
+            "Outperforms VCS and Xcelium on regressions. Ship silicon faster.",
+    },
+    {
+        title: "Your IP stays yours",
+        description:
+            "Runs on-premise or in your cloud. Design data never leaves your infrastructure.",
+    },
+    {
+        title: "Full observability",
+        description:
+            "Complete debug traces and coverage metrics. No FPGA black boxes.",
+    },
 ];
 
 const audiences = [
-  {
-    label: "IC & Silicon Startups",
-    description: "Emulator-grade performance without the $5M–$10M CapEx. Scale on cloud GPUs, pay as you go.",
-  },
-  {
-    label: "Fabless Design Teams",
-    description: "Shrink your regression wall. Run more iterations before tape-out.",
-  },
-  {
-    label: "Hyperscalers",
-    description: "Your GPU cluster sits idle between AI jobs. Put it to work on chip verification.",
-  },
+    {
+        label: "IC & Silicon Startups",
+        description:
+            "Emulator-grade throughput without the $5M–$10M CapEx. Scale on cloud GPUs.",
+    },
+    {
+        label: "Fabless Design Teams",
+        description:
+            "Shrink the regression wall. Run more iterations before tape-out.",
+    },
+    {
+        label: "Hyperscalers",
+        description:
+            "Put idle GPU clusters to work on chip verification between AI training jobs.",
+    },
 ];
 ---
 
-<section id="problem" class="py-24 px-6 bg-gray-50">
-  <div class="max-w-5xl mx-auto">
+<section id="problem" class="py-40 px-6 border-b border-verion-border">
+    <div class="max-w-6xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6"
+            >
+                Why Verion
+            </p>
 
-    <!-- Section label -->
-    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Why Verion</p>
-
-    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
-      The simulation performance modern chip design demands.
-    </h2>
-    <p class="mt-4 text-gray-500 max-w-xl">
-      Built for the pace of modern semiconductor development.
-    </p>
-
-    <!-- USP cards -->
-    <div class="mt-14 grid md:grid-cols-3 gap-6">
-      {usps.map((u) => (
-        <div class="bg-white rounded-xl p-6 border border-gray-100">
-          <div class="text-2xl mb-4">{u.icon}</div>
-          <h3 class="font-semibold text-gray-900 mb-2">{u.title}</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">{u.description}</p>
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                Chip design has outgrown its tools.
+            </h2>
+            <p class="mt-6 text-verion-subtle max-w-xl leading-relaxed text-lg">
+                Design complexity doubles every generation. Simulation
+                infrastructure hasn't kept up. Verion closes the gap.
+            </p>
         </div>
-      ))}
-    </div>
 
-    <!-- Who It's For -->
-    <div class="mt-20">
-      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Who it's for</p>
-      <div class="grid md:grid-cols-3 gap-6">
-        {audiences.map((a) => (
-          <div class="border-l-2 border-brand-500 pl-5">
-            <h3 class="font-semibold text-gray-900 mb-1">{a.label}</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">{a.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+        <div class="mt-24 grid md:grid-cols-3 gap-px bg-verion-border reveal">
+            {
+                usps.map((u, i) => (
+                    <div
+                        class={`bg-verion-bg p-8 md:p-10 card-hover reveal-delay-${i + 1}`}
+                    >
+                        <h3 class="font-mono text-sm text-verion-accent uppercase tracking-wide mb-4">
+                            {u.title}
+                        </h3>
+                        <p class="text-sm text-verion-subtle leading-relaxed">
+                            {u.description}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
 
-  </div>
+        <div class="mt-32 reveal">
+            <p
+                class="font-mono text-xs text-verion-muted uppercase tracking-widest mb-12"
+            >
+                Built for
+            </p>
+            <div class="grid md:grid-cols-3 gap-16">
+                {
+                    audiences.map((a) => (
+                        <div class="border-l border-verion-border hover:border-verion-accent/40 pl-6 transition-colors duration-300">
+                            <h3 class="text-white font-medium mb-3">
+                                {a.label}
+                            </h3>
+                            <p class="text-sm text-verion-muted leading-relaxed">
+                                {a.description}
+                            </p>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
 </section>

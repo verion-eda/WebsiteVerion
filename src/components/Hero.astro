@@ -2,55 +2,49 @@
 // Hero.astro
 ---
 
-<section class="pt-32 pb-24 px-6">
-  <div class="max-w-5xl mx-auto">
-
-    <!-- Eyebrow badge -->
-    <div class="inline-flex items-center gap-2 bg-brand-50 text-brand-500 text-xs font-medium px-3 py-1.5 rounded-full mb-6 border border-brand-100">
-      <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-      In development
+<section
+    class="relative pt-48 pb-40 px-6 border-b border-verion-border overflow-hidden"
+>
+    <!-- Ambient glow -->
+    <div
+        class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-verion-accent/[0.04] rounded-full blur-[120px] pointer-events-none"
+    >
     </div>
 
-    <!-- Headline -->
-    <h1 class="text-4xl md:text-6xl font-semibold text-gray-900 leading-tight tracking-tight max-w-3xl">
-        Silicon design, accelerated.
-    </h1>
+    <div class="relative max-w-6xl mx-auto">
+        <p
+            class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-10 animate-fade-in"
+        >
+            Now accepting design teams
+        </p>
 
-    <!-- Sub-headline -->
-    <p class="mt-6 text-lg text-gray-500 max-w-xl leading-relaxed">
-      Chip design has outgrown its tools. Verion is rebuilding the EDA stack from first principles — a GPU-native, intelligent platform that brings the speed and flexibility of modern software to the world's most complex engineering challenge.
-    </p>
+        <h1
+            class="text-5xl md:text-7xl lg:text-8xl font-bold text-verion-heading leading-[1.02] tracking-tight max-w-5xl animate-fade-in"
+            style="animation-delay: 0.1s;"
+        >
+            Silicon design,<br />accelerated.
+        </h1>
 
-    <!-- USP pills -->
-    <div class="mt-8 flex flex-wrap gap-3">
-      <span class="inline-flex items-center gap-1.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
-        <span class="text-brand-500 font-mono text-xs font-semibold">10x–50x</span> faster than CPU simulators
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
-        On-premise or cloud
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
-        Full debug traces &amp; coverage
-      </span>
+        <p
+            class="mt-10 text-lg md:text-xl text-verion-subtle max-w-xl leading-relaxed animate-fade-in"
+            style="animation-delay: 0.2s;"
+        >
+            Verion replaces your CPU-based RTL simulator with a GPU-native
+            engine. Same Verilog. Same testbenches. 10&ndash;50x faster
+            regressions.
+        </p>
+
+        <div class="mt-14 animate-fade-in" style="animation-delay: 0.3s;">
+            <a
+                href="#waitlist"
+                class="group inline-flex items-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/30 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/60 transition-all duration-300"
+            >
+                Request access
+                <span
+                    class="transition-transform duration-300 group-hover:translate-x-1"
+                    >&rarr;</span
+                >
+            </a>
+        </div>
     </div>
-
-    <!-- CTAs -->
-    <div class="mt-10 flex flex-col sm:flex-row gap-3">
-      <a
-        href="#waitlist"
-        class="inline-flex items-center justify-center gap-2 bg-brand-500 text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-600 transition-colors"
-      >
-        Try Verion on your next regression
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </a>
-      <a
-        href="#product"
-        class="inline-flex items-center justify-center gap-2 text-gray-700 font-medium px-6 py-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
-      >
-        See how it works
-      </a>
-    </div>
-  </div>
 </section>

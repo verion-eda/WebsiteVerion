@@ -2,50 +2,58 @@
 // Team.astro
 
 const team = [
-  {
-    name: "Daniel Kiesewalter",
-    role: "Co-founder",
-    bio: "Sony AI chip design engineer. Deep expertise in semiconductor verification and hardware architecture.",
-    initials: "DK",
-    color: "bg-violet-100 text-violet-600",
-  },
-  {
-    name: "Yves Inneichen",
-    role: "Co-founder",
-    bio: "ACM Gordon Bell Prize winner. Background in high-performance computing and GPU-accelerated systems.",
-    initials: "YI",
-    color: "bg-sky-100 text-sky-600",
-  },
+    {
+        name: "Daniel Kiesewalter",
+        role: "Co-founder",
+        bio: "Sony AI chip design engineer. Deep expertise in semiconductor verification and hardware architecture.",
+        initials: "DK",
+    },
+    {
+        name: "Yves Inneichen",
+        role: "Co-founder",
+        bio: "ACM Gordon Bell Prize winner. Background in high-performance computing and GPU-accelerated systems.",
+        initials: "YI",
+    },
 ];
 ---
 
-<section id="team" class="py-24 px-6 bg-gray-50">
-  <div class="max-w-5xl mx-auto">
+<section id="team" class="py-40 px-6 border-b border-verion-border">
+    <div class="max-w-6xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6"
+            >
+                Team
+            </p>
 
-    <!-- Section label -->
-    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">The team</p>
-
-    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-xl leading-snug">
-      Built by people who lived this problem.
-    </h2>
-    <p class="mt-4 text-gray-500 max-w-xl">
-      An ACM Gordon Bell Prize winner and a Sony AI chip design engineer — building the tools they wished they had.
-    </p>
-
-    <!-- Team cards -->
-    <div class="mt-14 grid md:grid-cols-2 gap-6 max-w-2xl">
-      {team.map((member) => (
-        <div class="bg-white rounded-xl p-6 border border-gray-100">
-          <!-- Avatar: swap the div below for <img> once you have photos -->
-          <div class={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm mb-4 ${member.color}`}>
-            {member.initials}
-          </div>
-          <h3 class="font-semibold text-gray-900">{member.name}</h3>
-          <p class="text-xs text-brand-500 font-medium mt-0.5 mb-3">{member.role}</p>
-          <p class="text-sm text-gray-500 leading-relaxed">{member.bio}</p>
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                Semiconductor engineers building for semiconductor engineers.
+            </h2>
         </div>
-      ))}
-    </div>
 
-  </div>
+        <div
+            class="mt-20 grid md:grid-cols-2 gap-px bg-verion-border max-w-3xl reveal"
+        >
+            {
+                team.map((member) => (
+                    <div class="bg-verion-bg p-8 md:p-10 card-hover">
+                        <div class="w-12 h-12 border border-verion-border flex items-center justify-center font-mono text-xs text-verion-muted mb-6">
+                            {member.initials}
+                        </div>
+                        <h3 class="text-white font-medium text-lg">
+                            {member.name}
+                        </h3>
+                        <p class="font-mono text-xs text-verion-accent mt-1.5 mb-5">
+                            {member.role}
+                        </p>
+                        <p class="text-sm text-verion-muted leading-relaxed">
+                            {member.bio}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
 </section>

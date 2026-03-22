@@ -2,34 +2,52 @@
 // Nav.astro
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
-  <nav class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-    <!-- Logo / Brand name -->
-    <a href="/" class="font-semibold text-gray-900 tracking-tight text-lg">
-      Verion
-    </a>
+<header
+    class="fixed top-0 left-0 right-0 z-50 bg-verion-bg/80 backdrop-blur-xl border-b border-verion-border/60"
+>
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a
+            href="/"
+            class="font-mono font-medium text-white tracking-tight text-sm uppercase"
+        >
+            Verion
+        </a>
 
-    <!-- Desktop links -->
-    <ul class="hidden md:flex items-center gap-8 text-sm text-gray-600">
-      <li><a href="#problem" class="hover:text-gray-900 transition-colors">Why Verion</a></li>
-      <li><a href="#product" class="hover:text-gray-900 transition-colors">How It Works</a></li>
-      <li><a href="#team" class="hover:text-gray-900 transition-colors">Team</a></li>
-    </ul>
+        <ul
+            class="hidden md:flex items-center gap-10 text-sm text-verion-muted"
+        >
+            <li>
+                <a
+                    href="#problem"
+                    class="hover:text-white transition-colors duration-300"
+                    >Why Verion</a>
+            </li>
+            <li>
+                <a
+                    href="#product"
+                    class="hover:text-white transition-colors duration-300"
+                    >Product</a>
+            </li>
+            <li>
+                <a
+                    href="#team"
+                    class="hover:text-white transition-colors duration-300"
+                    >Team</a>
+            </li>
+        </ul>
 
-    <!-- CTA -->
-    <a
-      href="#waitlist"
-      class="hidden md:inline-flex items-center gap-2 bg-brand-500 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors"
-    >
-      Get in touch
-    </a>
+        <a
+            href="#waitlist"
+            class="hidden md:inline-flex items-center text-sm text-verion-accent font-mono hover:text-white transition-colors duration-300"
+        >
+            Get in touch &rarr;
+        </a>
 
-    <!-- Mobile: just show the CTA -->
-    <a
-      href="#waitlist"
-      class="md:hidden text-sm font-medium text-brand-500"
-    >
-      Get in touch
-    </a>
-  </nav>
+        <a
+            href="#waitlist"
+            class="md:hidden text-sm font-mono text-verion-accent"
+        >
+            Contact &rarr;
+        </a>
+    </nav>
 </header>

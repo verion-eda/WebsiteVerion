@@ -1,0 +1,153 @@
+---
+// CodeExample.astro — Tabbed code block showing simulator usage in Rust, C++, Python
+
+const tabs = ["Rust", "C++", "Python"];
+
+const code = {
+    rust: `use verion::Simulator;
+
+fn main() {
+    let mut sim = Simulator::builder()
+        .design("alu_top.sv")
+        .testbench("alu_tb.sv")
+        .coverage(true)
+        .build()
+        .expect("failed to compile design");
+
+    sim.run();
+
+    println!("cycles: {}", sim.cycles());
+    println!("coverage: {:.1}%", sim.coverage() * 100.0);
+
+    sim.dump_waveform("alu_top.vcd");
+}`,
+    cpp: `#include <verion/simulator.h>
+
+int main() {
+    auto sim = verion::Simulator::builder()
+        .design("alu_top.sv")
+        .testbench("alu_tb.sv")
+        .coverage(true)
+        .build();
+
+    sim.run();
+
+    std::cout << "cycles: " << sim.cycles() << std::endl;
+    std::cout << "coverage: " << sim.coverage() * 100.0 << "%" << std::endl;
+
+    sim.dump_waveform("alu_top.vcd");
+    return 0;
+}`,
+    python: `import verion
+
+sim = verion.Simulator(
+    design="alu_top.sv",
+    testbench="alu_tb.sv",
+    coverage=True,
+)
+
+sim.run()
+
+print(f"cycles: {sim.cycles}")
+print(f"coverage: {sim.coverage:.1%}")
+
+sim.dump_waveform("alu_top.vcd")`,
+};
+---
+
+<section class="py-40 px-6 border-b border-verion-border">
+    <div class="max-w-6xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6"
+            >
+                Developer experience
+            </p>
+
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                A few lines to launch<br />a regression.
+            </h2>
+            <p class="mt-6 text-verion-subtle max-w-xl leading-relaxed text-lg">
+                Native SDKs for Rust, C++, and Python. Load your design, run
+                simulation, extract results — all programmatic.
+            </p>
+        </div>
+
+        <!-- Code viewer -->
+        <div
+            class="mt-20 border border-verion-border bg-verion-surface overflow-hidden reveal"
+            id="code-viewer"
+        >
+            <!-- Tabs -->
+            <div class="flex border-b border-verion-border bg-verion-bg/50">
+                {
+                    tabs.map((tab, i) => (
+                        <button
+                            data-tab={tab.toLowerCase().replace("++", "pp")}
+                            class={`px-6 py-4 font-mono text-xs uppercase tracking-wider transition-colors duration-200 ${
+                                i === 0
+                                    ? "text-verion-accent border-b-2 border-verion-accent -mb-px"
+                                    : "text-verion-muted hover:text-white"
+                            }`}
+                        >
+                            {tab}
+                        </button>
+                    ))
+                }
+            </div>
+
+            <!-- Code panels -->
+            <div class="relative">
+                <pre
+                    data-panel="rust"
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"><code set:text={code.rust} /></pre>
+
+                <pre
+                    data-panel="cpp"
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code set:text={code.cpp} /></pre>
+
+                <pre
+                    data-panel="python"
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code set:text={code.python} /></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const viewer = document.getElementById("code-viewer");
+    if (viewer) {
+        const buttons =
+            viewer.querySelectorAll<HTMLButtonElement>("[data-tab]");
+        const panels = viewer.querySelectorAll<HTMLPreElement>("[data-panel]");
+
+        buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const target = btn.dataset.tab;
+
+                buttons.forEach((b) => {
+                    b.classList.remove(
+                        "text-verion-accent",
+                        "border-b-2",
+                        "border-verion-accent",
+                        "-mb-px",
+                    );
+                    b.classList.add("text-verion-muted");
+                });
+                btn.classList.add(
+                    "text-verion-accent",
+                    "border-b-2",
+                    "border-verion-accent",
+                    "-mb-px",
+                );
+                btn.classList.remove("text-verion-muted");
+
+                panels.forEach((p) => {
+                    p.classList.toggle("hidden", p.dataset.panel !== target);
+                });
+            });
+        });
+    }
+</script>

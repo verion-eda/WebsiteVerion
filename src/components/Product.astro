@@ -1,151 +1,175 @@
 ---
-// Product.astro — How It Works + Comparison Table + Features + Integration + Roadmap
+// Product.astro
 
 const features = [
-  {
-    title: "Cycle-Accurate Simulation",
-    description: "Full-cycle, cycle-accurate simulation with multi-GPU scaling.",
-  },
-  {
-    title: "Fast Compile & Iterate",
-    description: "Fast compile times, save/restore, and dynamic stimulus reconfiguration — one compiled graph runs different stims.",
-  },
-  {
-    title: "Coverage Out of the Box",
-    description: "Code coverage and functional coverage metrics built in. No extra tooling required.",
-  },
-  {
-    title: "Open Ecosystem",
-    description: "Verion's API is open source — inspect it, build on it, trust it. No vendor lock-in, no black box.",
-  },
+    {
+        title: "Cycle-accurate simulation",
+        description:
+            "Full-cycle, cycle-accurate execution with multi-GPU scaling.",
+    },
+    {
+        title: "Fast compile & iterate",
+        description:
+            "Fast compile times, save/restore, and dynamic stimulus reconfiguration.",
+    },
+    {
+        title: "Coverage built in",
+        description:
+            "Code coverage and functional coverage metrics out of the box. No extra tooling.",
+    },
+    {
+        title: "Open ecosystem",
+        description:
+            "Open-source API. Inspect it, build on it, integrate it. No vendor lock-in.",
+    },
 ];
 
 const integration = [
-  { label: "Interfaces", items: "DPI, VPI, SCE-MI, UVM" },
-  { label: "APIs", items: "Python, Rust, C++" },
-  { label: "Hardware", items: "Nvidia, AMD, Apple Metal — or any cloud GPU provider" },
+    { label: "Interfaces", items: "DPI, VPI, SCE-MI, UVM" },
+    { label: "APIs", items: "Python, Rust, C++" },
+    { label: "Hardware", items: "Nvidia, AMD, Apple Metal" },
 ];
 
-const roadmap = [
-  "SVA support",
-  "Intelligent coverage optimization",
-  "Dynamic performance optimizer",
-  "Autonomous Verification (RL-based test generation)",
+const tableRows = [
+    {
+        metric: "Speed",
+        cpu: "Baseline",
+        fpga: "Fast",
+        verion: "10x–50x faster",
+    },
+    { metric: "Compile time", cpu: "Fast", fpga: "Hours", verion: "Fast" },
+    { metric: "Debug traces", cpu: "Yes", fpga: "No", verion: "Yes" },
+    { metric: "On-premise", cpu: "Yes", fpga: "Yes", verion: "Yes" },
+    { metric: "Cloud scaling", cpu: "No", fpga: "No", verion: "Yes" },
+    { metric: "Cost", cpu: "Low", fpga: "$5–10M CapEx", verion: "OpEx only" },
 ];
 ---
 
-<section id="product" class="py-24 px-6">
-  <div class="max-w-5xl mx-auto">
+<section id="product" class="py-40 px-6 border-b border-verion-border">
+    <div class="max-w-6xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6"
+            >
+                Product
+            </p>
 
-    <!-- Section label -->
-    <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">How it works</p>
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                Drop-in GPU simulation.<br />No rewrites required.
+            </h2>
+            <p
+                class="mt-6 text-verion-subtle max-w-2xl leading-relaxed text-lg"
+            >
+                Verion's compiler maps standard Verilog and SystemVerilog onto
+                GPU clusters automatically. The irregular branching of chip
+                logic is partitioned and parallelized — unlocking throughput
+                that CPU simulators cannot match.
+            </p>
+        </div>
 
-    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 max-w-2xl leading-snug">
-      GPU-native simulation.<br />No design rewrites required.
-    </h2>
-    <p class="mt-4 text-gray-500 max-w-2xl">
-      Verion's compiler automatically maps standard Verilog/SystemVerilog onto GPU clusters. We solved the synchronization problem that made GPUs impractical for RTL simulation: the irregular branching of chip logic is efficiently partitioned and parallelized, unlocking GPU throughput that legacy CPU simulators cannot match.
-    </p>
-
-    <!-- Comparison Table -->
-    <div class="mt-14 rounded-2xl border border-gray-200 overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200">
-              <th class="text-left px-6 py-4 font-medium text-gray-500"></th>
-              <th class="text-left px-6 py-4 font-medium text-gray-500">CPU Simulator</th>
-              <th class="text-left px-6 py-4 font-medium text-gray-500">FPGA Emulator</th>
-              <th class="text-left px-6 py-4 font-medium text-brand-600 bg-brand-50">Verion</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">Speed</td>
-              <td class="px-6 py-3.5 text-gray-500">Baseline</td>
-              <td class="px-6 py-3.5 text-gray-500">Fast</td>
-              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">10x–50x faster</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">Compile time</td>
-              <td class="px-6 py-3.5 text-gray-500">Fast</td>
-              <td class="px-6 py-3.5 text-gray-500">Hours</td>
-              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">Fast</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">Debug traces</td>
-              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
-              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
-              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">On-premise</td>
-              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
-              <td class="px-6 py-3.5 text-green-600">&#10003;</td>
-              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">Cloud scaling</td>
-              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
-              <td class="px-6 py-3.5 text-red-400">&#10005;</td>
-              <td class="px-6 py-3.5 text-green-600 bg-brand-50/50">&#10003;</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3.5 font-medium text-gray-700">Cost</td>
-              <td class="px-6 py-3.5 text-gray-500">Low</td>
-              <td class="px-6 py-3.5 text-gray-500">$5–10M CapEx</td>
-              <td class="px-6 py-3.5 text-brand-600 font-semibold bg-brand-50/50">OpEx, no hardware</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Feature grid -->
-    <div class="mt-20">
-      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-8">Performance &amp; Observability</p>
-      <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-        {features.map((f, i) => (
-          <div class="flex gap-4">
-            <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-500 font-semibold text-sm font-mono">
-              {String(i + 1).padStart(2, '0')}
+        <!-- Comparison table -->
+        <div class="mt-24 border border-verion-border overflow-hidden reveal">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr
+                            class="border-b border-verion-border bg-verion-surface/50"
+                        >
+                            <th
+                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
+                            ></th>
+                            <th
+                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
+                                >CPU Sim</th
+                            >
+                            <th
+                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
+                                >FPGA</th
+                            >
+                            <th
+                                class="text-left px-6 py-5 font-mono text-xs text-verion-accent uppercase tracking-wider bg-verion-accent/5"
+                                >Verion</th
+                            >
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            tableRows.map((row, i) => (
+                                <tr
+                                    class={`border-b border-verion-border last:border-b-0 hover:bg-verion-surface/30 transition-colors`}
+                                >
+                                    <td class="px-6 py-4 text-white font-medium">
+                                        {row.metric}
+                                    </td>
+                                    <td class="px-6 py-4 text-verion-muted">
+                                        {row.cpu}
+                                    </td>
+                                    <td class="px-6 py-4 text-verion-muted">
+                                        {row.fpga}
+                                    </td>
+                                    <td class="px-6 py-4 text-verion-accent font-mono bg-verion-accent/5">
+                                        {row.verion}
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
             </div>
-            <div>
-              <h3 class="font-semibold text-gray-900 mb-1">{f.title}</h3>
-              <p class="text-sm text-gray-500 leading-relaxed">{f.description}</p>
+        </div>
+
+        <!-- Features -->
+        <div class="mt-32 reveal">
+            <p
+                class="font-mono text-xs text-verion-muted uppercase tracking-widest mb-14"
+            >
+                Capabilities
+            </p>
+            <div class="grid md:grid-cols-2 gap-px bg-verion-border">
+                {
+                    features.map((f, i) => (
+                        <div class="bg-verion-bg p-8 md:p-10 card-hover">
+                            <span class="font-mono text-xs text-verion-muted/60">
+                                {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <h3 class="text-white font-medium mt-3 mb-3">
+                                {f.title}
+                            </h3>
+                            <p class="text-sm text-verion-muted leading-relaxed">
+                                {f.description}
+                            </p>
+                        </div>
+                    ))
+                }
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+        </div>
 
-    <!-- Integration -->
-    <div class="mt-20">
-      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Integration</p>
-      <h3 class="text-2xl font-semibold text-gray-900 mb-2">Drop into your existing flow.</h3>
-      <p class="text-gray-500 mb-8 max-w-xl">No rewrites. Works with the interfaces, languages, and hardware you already use.</p>
-      <div class="grid md:grid-cols-3 gap-6">
-        {integration.map((ig) => (
-          <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
-            <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-2">{ig.label}</p>
-            <p class="text-sm text-gray-700 font-mono leading-relaxed">{ig.items}</p>
-          </div>
-        ))}
-      </div>
+        <!-- Integration -->
+        <div class="mt-32 reveal">
+            <p
+                class="font-mono text-xs text-verion-muted uppercase tracking-widest mb-4"
+            >
+                Integration
+            </p>
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-12">
+                Works with your existing flow.
+            </h3>
+            <div class="grid md:grid-cols-3 gap-px bg-verion-border">
+                {
+                    integration.map((ig) => (
+                        <div class="bg-verion-bg p-6 md:p-8 card-hover">
+                            <p class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-4">
+                                {ig.label}
+                            </p>
+                            <p class="text-sm text-verion-subtle font-mono">
+                                {ig.items}
+                            </p>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
     </div>
-
-    <!-- Roadmap -->
-    <div class="mt-20">
-      <p class="text-xs font-medium text-brand-500 uppercase tracking-widest mb-4">Roadmap</p>
-      <div class="flex flex-wrap gap-3">
-        {roadmap.map((item) => (
-          <span class="inline-flex items-center gap-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 px-4 py-2 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-
-  </div>
 </section>

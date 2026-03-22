@@ -3,12 +3,22 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-gray-100 py-10 px-6">
-  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
-    <span>© {year} Verion EDA</span>
-    <div class="flex gap-6">
-      <a href="mailto:contact@verion-eda.com" class="hover:text-gray-600 transition-colors">Contact</a>
-      <a href="https://linkedin.com/Verion" class="hover:text-gray-600 transition-colors">LinkedIn</a>
+<footer class="py-10 px-6 border-t border-verion-border/40">
+    <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-verion-muted"
+    >
+        <span>&copy; {year} Verion EDA</span>
+        <div class="flex gap-8">
+            <a
+                href="mailto:contact@verion-eda.com"
+                class="hover:text-white transition-colors duration-300"
+                >Contact</a
+            >
+            <a
+                href="https://linkedin.com/Verion"
+                class="hover:text-white transition-colors duration-300"
+                >LinkedIn</a
+            >
+        </div>
     </div>
-  </div>
 </footer>
