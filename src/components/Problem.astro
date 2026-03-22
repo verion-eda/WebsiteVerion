@@ -38,11 +38,11 @@ const audiences = [
 ];
 ---
 
-<section id="problem" class="py-40 px-6 border-b border-verion-border">
-    <div class="max-w-6xl mx-auto">
+<section id="problem" class="py-40 px-8 lg:px-12 section-connector">
+    <div class="max-w-7xl mx-auto">
         <div class="reveal">
             <p
-                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6"
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
             >
                 Why Verion
             </p>
@@ -58,13 +58,15 @@ const audiences = [
             </p>
         </div>
 
-        <div class="mt-24 grid md:grid-cols-3 gap-px bg-verion-border reveal">
+        <div
+            class="mt-24 grid md:grid-cols-3 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow reveal"
+        >
             {
                 usps.map((u, i) => (
                     <div
-                        class={`bg-verion-bg p-8 md:p-10 card-hover reveal-delay-${i + 1}`}
+                        class={`bg-verion-bg p-8 md:p-10 card-glow reveal-delay-${i + 1}`}
                     >
-                        <h3 class="font-mono text-sm text-verion-accent uppercase tracking-wide mb-4">
+                        <h3 class="font-mono text-sm text-verion-accent uppercase tracking-wide mb-4 text-glow-subtle">
                             {u.title}
                         </h3>
                         <p class="text-sm text-verion-subtle leading-relaxed">
@@ -84,7 +86,7 @@ const audiences = [
             <div class="grid md:grid-cols-3 gap-16">
                 {
                     audiences.map((a) => (
-                        <div class="border-l border-verion-border hover:border-verion-accent/40 pl-6 transition-colors duration-300">
+                        <div class="border-l border-verion-border hover:border-verion-accent/60 pl-6 transition-all duration-300 hover:shadow-neon-red">
                             <h3 class="text-white font-medium mb-3">
                                 {a.label}
                             </h3>

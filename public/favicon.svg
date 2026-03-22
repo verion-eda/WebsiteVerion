@@ -1,4 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#3b5bdb"/>
-  <text x="16" y="22" text-anchor="middle" font-family="system-ui" font-weight="600" font-size="16" fill="white">Y</text>
+  <rect width="32" height="32" rx="4" fill="#050507"/>
+  <g stroke="#ff2d2d" stroke-width="1.5" stroke-linecap="round" fill="none">
+    <!-- Chip body -->
+    <rect x="8" y="8" width="16" height="16" rx="1.5"/>
+    <!-- Inner die -->
+    <rect x="12" y="12" width="8" height="8" rx="1"/>
+    <!-- Top pins -->
+    <line x1="12" y1="3" x2="12" y2="8"/>
+    <line x1="16" y1="3" x2="16" y2="8"/>
+    <line x1="20" y1="3" x2="20" y2="8"/>
+    <!-- Bottom pins -->
+    <line x1="12" y1="24" x2="12" y2="29"/>
+    <line x1="16" y1="24" x2="16" y2="29"/>
+    <line x1="20" y1="24" x2="20" y2="29"/>
+    <!-- Left pins -->
+    <line x1="3" y1="12" x2="8" y2="12"/>
+    <line x1="3" y1="16" x2="8" y2="16"/>
+    <line x1="3" y1="20" x2="8" y2="20"/>
+    <!-- Right pins -->
+    <line x1="24" y1="12" x2="29" y2="12"/>
+    <line x1="24" y1="16" x2="29" y2="16"/>
+    <line x1="24" y1="20" x2="29" y2="20"/>
+  </g>
 </svg>

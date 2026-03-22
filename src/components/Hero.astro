@@ -3,48 +3,116 @@
 ---
 
 <section
-    class="relative pt-48 pb-40 px-6 border-b border-verion-border overflow-hidden"
+    class="relative pt-48 pb-40 px-8 lg:px-12 section-connector overflow-hidden"
 >
-    <!-- Ambient glow -->
+    <!-- Ares ambient glow - red/orange radial -->
     <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-verion-accent/[0.04] rounded-full blur-[120px] pointer-events-none"
+        class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] pointer-events-none"
+        style="background: radial-gradient(ellipse at center, rgba(255, 45, 45, 0.08) 0%, rgba(255, 106, 0, 0.03) 40%, transparent 70%); filter: blur(60px);"
     >
     </div>
 
-    <div class="relative max-w-6xl mx-auto">
-        <p
-            class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-10 animate-fade-in"
-        >
-            Now accepting design teams
-        </p>
+    <!-- Corner accent lines -->
+    <div
+        class="absolute top-24 left-6 w-20 h-px bg-gradient-to-r from-verion-accent/40 to-transparent"
+    >
+    </div>
+    <div
+        class="absolute top-24 left-6 w-px h-20 bg-gradient-to-b from-verion-accent/40 to-transparent"
+    >
+    </div>
 
-        <h1
-            class="text-5xl md:text-7xl lg:text-8xl font-bold text-verion-heading leading-[1.02] tracking-tight max-w-5xl animate-fade-in"
-            style="animation-delay: 0.1s;"
-        >
-            Silicon design,<br />accelerated.
-        </h1>
-
-        <p
-            class="mt-10 text-lg md:text-xl text-verion-subtle max-w-xl leading-relaxed animate-fade-in"
-            style="animation-delay: 0.2s;"
-        >
-            Verion replaces your CPU-based RTL simulator with a GPU-native
-            engine. Same Verilog. Same testbenches. 10&ndash;50x faster
-            regressions.
-        </p>
-
-        <div class="mt-14 animate-fade-in" style="animation-delay: 0.3s;">
-            <a
-                href="#waitlist"
-                class="group inline-flex items-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/30 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/60 transition-all duration-300"
-            >
-                Request access
-                <span
-                    class="transition-transform duration-300 group-hover:translate-x-1"
-                    >&rarr;</span
+    <div class="relative max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <!-- Left: Text content -->
+            <div>
+                <p
+                    class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-10 animate-fade-in text-glow-subtle"
                 >
-            </a>
+                    Now accepting design teams
+                </p>
+
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl font-bold text-verion-heading leading-[1.02] tracking-tight animate-fade-in"
+                    style="animation-delay: 0.1s;"
+                >
+                    Silicon design,<br /><span
+                        class="text-verion-accent text-glow">accelerated.</span
+                    >
+                </h1>
+
+                <p
+                    class="mt-10 text-lg md:text-xl text-verion-subtle max-w-xl leading-relaxed animate-fade-in"
+                    style="animation-delay: 0.2s;"
+                >
+                    Verion replaces your CPU-based RTL simulator with a
+                    GPU-native engine. Same Verilog. Same testbenches.
+                    10&ndash;50x faster regressions.
+                </p>
+
+                <div
+                    class="mt-14 animate-fade-in"
+                    style="animation-delay: 0.3s;"
+                >
+                    <a
+                        href="#waitlist"
+                        class="btn-neon group inline-flex items-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/40 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/80 transition-all duration-300"
+                    >
+                        Request access
+                        <span
+                            class="transition-transform duration-300 group-hover:translate-x-1"
+                            >&rarr;</span
+                        >
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Chip image -->
+            <div
+                class="relative animate-fade-in hidden md:block"
+                style="animation-delay: 0.3s;"
+            >
+                <!-- Neon frame -->
+                <div
+                    class="relative border border-verion-accent/20 p-1 border-glow"
+                >
+                    <!-- Inner glow overlay -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-verion-accent/5 via-transparent to-verion-orange/5 pointer-events-none z-10"
+                    >
+                    </div>
+
+                    <img
+                        src="/hero-chip.jpg"
+                        alt="Silicon chip die macro photograph"
+                        class="w-full h-auto object-cover grayscale-[50%] contrast-[1.05] brightness-[0.45] saturate-[0.6]"
+                    />
+
+                    <!-- Red tint overlay -->
+                    <div
+                        class="absolute inset-0 bg-verion-accent/15 mix-blend-overlay pointer-events-none"
+                    >
+                    </div>
+                </div>
+
+                <!-- Corner accents on frame -->
+                <div
+                    class="absolute -top-px -right-px w-8 h-px bg-gradient-to-l from-verion-accent/60 to-transparent"
+                >
+                </div>
+                <div
+                    class="absolute -top-px -right-px w-px h-8 bg-gradient-to-b from-verion-accent/60 to-transparent"
+                >
+                </div>
+                <div
+                    class="absolute -bottom-px -left-px w-8 h-px bg-gradient-to-r from-verion-accent/60 to-transparent"
+                >
+                </div>
+                <div
+                    class="absolute -bottom-px -left-px w-px h-8 bg-gradient-to-t from-verion-accent/60 to-transparent"
+                >
+                </div>
+            </div>
         </div>
     </div>
 </section>

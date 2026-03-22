@@ -3,13 +3,46 @@
 ---
 
 <header
-    class="fixed top-0 left-0 right-0 z-50 bg-verion-bg/80 backdrop-blur-xl border-b border-verion-border/60"
+    class="fixed top-0 left-0 right-0 z-50 bg-verion-bg/70 backdrop-blur-xl"
 >
-    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="neon-line"></div>
+    <nav
+        class="max-w-7xl mx-auto px-8 lg:px-12 h-16 flex items-center justify-between"
+    >
         <a
             href="/"
-            class="font-mono font-medium text-white tracking-tight text-sm uppercase"
+            class="flex items-center gap-3 font-terminal font-normal text-verion-accent tracking-[0.25em] text-2xl text-glow-subtle"
         >
+            <svg
+                class="w-6 h-6 text-verion-accent drop-shadow-[0_0_6px_rgba(255,45,45,0.5)]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <!-- Chip body -->
+                <rect x="6" y="6" width="12" height="12" rx="1"></rect>
+                <!-- Inner die -->
+                <rect x="9" y="9" width="6" height="6" rx="0.5"></rect>
+                <!-- Top pins -->
+                <line x1="9" y1="3" x2="9" y2="6"></line>
+                <line x1="12" y1="3" x2="12" y2="6"></line>
+                <line x1="15" y1="3" x2="15" y2="6"></line>
+                <!-- Bottom pins -->
+                <line x1="9" y1="18" x2="9" y2="21"></line>
+                <line x1="12" y1="18" x2="12" y2="21"></line>
+                <line x1="15" y1="18" x2="15" y2="21"></line>
+                <!-- Left pins -->
+                <line x1="3" y1="9" x2="6" y2="9"></line>
+                <line x1="3" y1="12" x2="6" y2="12"></line>
+                <line x1="3" y1="15" x2="6" y2="15"></line>
+                <!-- Right pins -->
+                <line x1="18" y1="9" x2="21" y2="9"></line>
+                <line x1="18" y1="12" x2="21" y2="12"></line>
+                <line x1="18" y1="15" x2="21" y2="15"></line>
+            </svg>
             Verion
         </a>
 
@@ -19,35 +52,39 @@
             <li>
                 <a
                     href="#problem"
-                    class="hover:text-white transition-colors duration-300"
-                    >Why Verion</a>
+                    class="hover:text-verion-accent transition-colors duration-300"
+                    >Why Verion</a
+                >
             </li>
             <li>
                 <a
                     href="#product"
-                    class="hover:text-white transition-colors duration-300"
-                    >Product</a>
+                    class="hover:text-verion-accent transition-colors duration-300"
+                    >Product</a
+                >
             </li>
             <li>
                 <a
                     href="#team"
-                    class="hover:text-white transition-colors duration-300"
-                    >Team</a>
+                    class="hover:text-verion-accent transition-colors duration-300"
+                    >Team</a
+                >
             </li>
         </ul>
 
         <a
             href="#waitlist"
-            class="hidden md:inline-flex items-center text-sm text-verion-accent font-mono hover:text-white transition-colors duration-300"
+            class="hidden md:inline-flex items-center text-sm text-verion-accent font-mono hover:text-verion-accent-bright transition-colors duration-300 text-glow-subtle"
         >
             Get in touch &rarr;
         </a>
 
         <a
             href="#waitlist"
-            class="md:hidden text-sm font-mono text-verion-accent"
+            class="md:hidden text-sm font-mono text-verion-accent text-glow-subtle"
         >
             Contact &rarr;
         </a>
     </nav>
+    <div class="neon-line opacity-30"></div>
 </header>
