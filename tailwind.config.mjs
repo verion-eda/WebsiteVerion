@@ -17,14 +17,14 @@ export default {
           "border-light": "#2a2a3a",
           muted: "#6b6b7b",
           subtle: "#a0a0b0",
-          accent: "#ff2d2d",
-          "accent-bright": "#ff4444",
-          "accent-dim": "#ff2d2d18",
-          orange: "#ff6a00",
-          amber: "#ffaa00",
+          accent: "#00d4ff",
+          "accent-bright": "#00e5ff",
+          "accent-dim": "#00d4ff18",
+          orange: "#0088ff",
+          amber: "#00ffcc",
           heading: "#e0dde6",
-          glow: "#ff2d2d",
-          "glow-orange": "#ff6a00",
+          glow: "#00d4ff",
+          "glow-orange": "#0088ff",
         },
       },
       animation: {
@@ -49,8 +49,8 @@ export default {
           "100%": { transform: "translateY(80px)" },
         },
         borderGlow: {
-          "0%, 100%": { borderColor: "rgba(255, 45, 45, 0.2)" },
-          "50%": { borderColor: "rgba(255, 45, 45, 0.6)" },
+          "0%, 100%": { borderColor: "rgba(0, 212, 255, 0.2)" },
+          "50%": { borderColor: "rgba(0, 212, 255, 0.6)" },
         },
         scanline: {
           "0%": { transform: "translateY(-100%)" },
@@ -59,12 +59,12 @@ export default {
       },
       boxShadow: {
         "neon-red":
-          "0 0 15px rgba(255, 45, 45, 0.3), 0 0 60px rgba(255, 45, 45, 0.1)",
+          "0 0 15px rgba(0, 212, 255, 0.3), 0 0 60px rgba(0, 212, 255, 0.1)",
         "neon-red-strong":
-          "0 0 20px rgba(255, 45, 45, 0.5), 0 0 80px rgba(255, 45, 45, 0.2), 0 0 120px rgba(255, 45, 45, 0.1)",
+          "0 0 20px rgba(0, 212, 255, 0.5), 0 0 80px rgba(0, 212, 255, 0.2), 0 0 120px rgba(0, 212, 255, 0.1)",
         "neon-orange":
-          "0 0 15px rgba(255, 106, 0, 0.3), 0 0 60px rgba(255, 106, 0, 0.1)",
-        "neon-inner": "inset 0 0 30px rgba(255, 45, 45, 0.05)",
+          "0 0 15px rgba(0, 136, 255, 0.3), 0 0 60px rgba(0, 136, 255, 0.1)",
+        "neon-inner": "inset 0 0 30px rgba(0, 212, 255, 0.05)",
       },
     },
   },
