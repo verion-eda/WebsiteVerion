@@ -1,0 +1,33 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Marketing/landing page for Verion EDA (verion-eda.com) — a GPU-accelerated RTL simulation tool. Single-page Astro site with Tailwind CSS. Deployed to GitHub Pages via GitHub Actions on push to `main`.
+
+## Commands
+
+- `npm run dev` — Start dev server at http://localhost:4321
+- `npm run build` — Production build to `dist/`
+- `npm run preview` — Preview production build locally
+- `nix develop` — Enter Nix dev shell (Node.js 22 + npm)
+
+No test suite or linter is configured.
+
+## Architecture
+
+**Stack:** Astro 4 + Tailwind CSS 3, static output (no SSR).
+
+**Page structure:** Single page (`src/pages/index.astro`) assembles section components in order:
+`Nav → Hero → Problem → Product → CodeExample → Team → Waitlist → Footer`
+
+**Layout:** `src/layouts/Base.astro` provides the HTML shell, font loading (Inter, JetBrains Mono, Share Tech Mono via Google Fonts), global CSS (Tron/neon aesthetic with grid background, scanline overlay, glow effects), and an IntersectionObserver for `.reveal` scroll animations.
+
+**Styling:** Dark theme with custom `verion-*` color palette, neon glow effects, and custom animations defined in `tailwind.config.mjs`. Global utility classes (`card-glow`, `text-glow`, `btn-neon`, `neon-line`, `reveal`) are in `Base.astro`'s `<style>` block, not in separate CSS files.
+
+**Deployment:** GitHub Actions workflow (`.github/workflows/deploy.yml`) runs `npm ci && npm run build` and deploys `dist/` to GitHub Pages. Custom domain `verion-eda.com` via `public/CNAME`.
+
+**Static assets:** `public/` contains `chipicon.svg` (favicon), `hero-chip.jpg`, and `CNAME`.
+
+**Waitlist form:** `Waitlist.astro` uses Formspree — requires a form ID to be set in the action URL.
