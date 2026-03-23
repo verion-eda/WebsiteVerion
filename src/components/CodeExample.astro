@@ -4,54 +4,64 @@
 const tabs = ["Rust", "C++", "Python"];
 
 const code = {
-    rust: `use verion::Simulator;
+    rust: `use verion_simulator::SimulatorBuilder;
 
-fn main() {
-    let mut sim = Simulator::builder()
-        .design("alu_top.sv")
-        .testbench("alu_tb.sv")
-        .coverage(true)
-        .build()
-        .expect("failed to compile design");
+fn main() -> anyhow::Result<()> {
+    let mut dut = SimulatorBuilder::new()
+    .build()?;
 
-    sim.run();
+    dut.reset();
 
-    println!("cycles: {}", sim.cycles());
-    println!("coverage: {:.1}%", sim.coverage() * 100.0);
+    dut.poke_signal("a", true)?;
+    dut.poke_signal("b", true)?;
+    dut.step();
 
-    sim.dump_waveform("alu_top.vcd");
+    let sum = dut.peek_signal("sum")?;
+    let carry = dut.peek_signal("carry")?;
+    println!("sum={}, carry={}", sum, carry);
+
+    dut.sync();
+
+    Ok(())
 }`,
-    cpp: `#include <verion/simulator.h>
+    cpp: `#include "verion.h"
+#include <stdio.h>
 
 int main() {
-    auto sim = verion::Simulator::builder()
-        .design("alu_top.sv")
-        .testbench("alu_tb.sv")
-        .coverage(true)
-        .build();
+    SimResult res = sim_create();
 
-    sim.run();
+    res = sim_reset(res.handle);
 
-    std::cout << "cycles: " << sim.cycles() << std::endl;
-    std::cout << "coverage: " << sim.coverage() * 100.0 << "%" << std::endl;
+    sim_poke_signal(res.handle, "a", true);
+    sim_poke_signal(res.handle, "b", true);
+    res = sim_step(res.handle);
 
-    sim.dump_waveform("alu_top.vcd");
+    uint64_t sum, carry;
+    sim_peek_signal(res.handle, "sum", &sum);
+    sim_peek_signal(res.handle, "carry", &carry);
+    printf("sum=%llu, carry=%llu\\n", sum, carry);
+
+    sim_dump(res.handle, "dump.vcd");
+
     return 0;
 }`,
-    python: `import verion
+    python: `from verion import Simulator
 
-sim = verion.Simulator(
-    design="alu_top.sv",
-    testbench="alu_tb.sv",
-    coverage=True,
+sim = Simulator(
+    device_id=0,
 )
 
-sim.run()
+sim.reset()
 
-print(f"cycles: {sim.cycles}")
-print(f"coverage: {sim.coverage:.1%}")
+sim.poke_signal("a", True)
+sim.poke_signal("b", True)
+sim.step()
 
-sim.dump_waveform("alu_top.vcd")`,
+sum_val = sim.peek_signal("sum")
+carry = sim.peek_signal("carry")
+print(f"sum={sum_val}, carry={carry}")
+
+sim.sync()`,
 };
 ---
 
@@ -125,19 +135,40 @@ sim.dump_waveform("alu_top.vcd")`,
 
             <!-- Code panels -->
             <div class="relative">
-                <div data-panel="rust" data-full-code={code.rust} class="code-panel">
-                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.rust}</span></pre>
-                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                <div
+                    data-panel="rust"
+                    data-full-code={code.rust}
+                    class="code-panel"
+                >
+                    <pre
+                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        aria-hidden="true"><span class="code-sizer">{code.rust}</span></pre>
+                    <pre
+                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
 
-                <div data-panel="cpp" data-full-code={code.cpp} class="code-panel hidden">
-                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.cpp}</span></pre>
-                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                <div
+                    data-panel="cpp"
+                    data-full-code={code.cpp}
+                    class="code-panel hidden"
+                >
+                    <pre
+                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        aria-hidden="true"><span class="code-sizer">{code.cpp}</span></pre>
+                    <pre
+                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
 
-                <div data-panel="python" data-full-code={code.python} class="code-panel hidden">
-                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.python}</span></pre>
-                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                <div
+                    data-panel="python"
+                    data-full-code={code.python}
+                    class="code-panel hidden"
+                >
+                    <pre
+                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        aria-hidden="true"><span class="code-sizer">{code.python}</span></pre>
+                    <pre
+                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
             </div>
         </div>
@@ -164,8 +195,13 @@ sim.dump_waveform("alu_top.vcd")`,
         animation: blink 0.6s step-end infinite;
     }
     @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
     }
 </style>
 
@@ -188,7 +224,9 @@ sim.dump_waveform("alu_top.vcd")`,
             const fullCode = panel.dataset.fullCode || "";
             const overlay = panel.querySelector(".code-overlay")!;
             const codeEl = overlay.querySelector("code")!;
-            const cursor = overlay.querySelector(".typing-cursor") as HTMLElement;
+            const cursor = overlay.querySelector(
+                ".typing-cursor",
+            ) as HTMLElement;
 
             codeEl.textContent = "";
             if (cursor) cursor.style.display = "inline";
@@ -201,7 +239,10 @@ sim.dump_waveform("alu_top.vcd")`,
                 if (!lastTime) lastTime = timestamp;
                 const elapsed = timestamp - lastTime;
                 // Type multiple chars per frame to keep up at 12ms/char
-                const charsToType = Math.max(1, Math.floor(elapsed / charDelay));
+                const charsToType = Math.max(
+                    1,
+                    Math.floor(elapsed / charDelay),
+                );
 
                 if (i < fullCode.length) {
                     const end = Math.min(i + charsToType, fullCode.length);
@@ -260,7 +301,7 @@ sim.dump_waveform("alu_top.vcd")`,
                     if (entry.isIntersecting) {
                         // Type the first visible panel
                         const active = viewer.querySelector<HTMLDivElement>(
-                            '[data-panel]:not(.hidden)'
+                            "[data-panel]:not(.hidden)",
                         );
                         if (active) typeCode(active);
                         observer.unobserve(entry.target);
