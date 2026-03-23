@@ -36,11 +36,16 @@
             </div>
 
             <form
-                action="https://formspree.io/f/YOUR_FORM_ID"
+                action="https://api.web3forms.com/submit"
                 method="POST"
                 class="reveal border border-verion-accent/15 bg-verion-surface/50 p-8 md:p-10 border-glow"
                 id="contact-form"
             >
+                <input type="hidden" name="access_key" value="139492b4-1f67-435a-b92e-6092a9522d23" />
+                <input type="hidden" name="subject" value="New early access request — Verion EDA" />
+                <input type="hidden" name="from_name" value="Verion Website" />
+                <!-- Honeypot spam trap — bots fill this, humans don't see it -->
+                <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
                 <div class="space-y-6">
                     <div>
                         <label for="name" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Name</label>
@@ -114,7 +119,7 @@
         btn.textContent = "Sending...";
 
         try {
-            const res = await fetch(form.action, {
+            const res = await fetch("https://api.web3forms.com/submit", {
                 method: "POST",
                 body: new FormData(form),
                 headers: { Accept: "application/json" },
