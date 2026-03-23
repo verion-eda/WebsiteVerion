@@ -127,19 +127,33 @@ sim.dump_waveform("alu_top.vcd")`,
             <div class="relative">
                 <pre
                     data-panel="rust"
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"><code set:text={code.rust} /></pre>
+                    data-full-code={code.rust}
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
 
                 <pre
                     data-panel="cpp"
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code set:text={code.cpp} /></pre>
+                    data-full-code={code.cpp}
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code></code><span class="typing-cursor">▌</span></pre>
 
                 <pre
                     data-panel="python"
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code set:text={code.python} /></pre>
+                    data-full-code={code.python}
+                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code></code><span class="typing-cursor">▌</span></pre>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .typing-cursor {
+        color: rgba(0, 212, 255, 0.8);
+        animation: blink 0.6s step-end infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+</style>
 
 <script>
     const viewer = document.getElementById("code-viewer");
@@ -148,6 +162,51 @@ sim.dump_waveform("alu_top.vcd")`,
             viewer.querySelectorAll<HTMLButtonElement>("[data-tab]");
         const panels = viewer.querySelectorAll<HTMLPreElement>("[data-panel]");
 
+        let currentAnim: number | null = null;
+
+        function typeCode(panel: HTMLPreElement) {
+            // Cancel any running animation
+            if (currentAnim !== null) {
+                cancelAnimationFrame(currentAnim);
+                currentAnim = null;
+            }
+
+            const fullCode = panel.dataset.fullCode || "";
+            const codeEl = panel.querySelector("code")!;
+            const cursor = panel.querySelector(".typing-cursor") as HTMLElement;
+
+            codeEl.textContent = "";
+            if (cursor) cursor.style.display = "inline";
+
+            let i = 0;
+            const charDelay = 12; // ms per character
+            let lastTime = 0;
+
+            function step(timestamp: number) {
+                if (!lastTime) lastTime = timestamp;
+                const elapsed = timestamp - lastTime;
+                // Type multiple chars per frame to keep up at 12ms/char
+                const charsToType = Math.max(1, Math.floor(elapsed / charDelay));
+
+                if (i < fullCode.length) {
+                    const end = Math.min(i + charsToType, fullCode.length);
+                    codeEl.textContent += fullCode.slice(i, end);
+                    i = end;
+                    lastTime = timestamp;
+                    currentAnim = requestAnimationFrame(step);
+                } else {
+                    // Done typing — keep cursor blinking for a moment, then hide
+                    currentAnim = null;
+                    setTimeout(() => {
+                        if (cursor) cursor.style.display = "none";
+                    }, 2000);
+                }
+            }
+
+            currentAnim = requestAnimationFrame(step);
+        }
+
+        // Tab switching
         buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
                 const target = btn.dataset.tab;
@@ -172,9 +231,29 @@ sim.dump_waveform("alu_top.vcd")`,
                 btn.classList.remove("text-verion-muted");
 
                 panels.forEach((p) => {
-                    p.classList.toggle("hidden", p.dataset.panel !== target);
+                    const isTarget = p.dataset.panel === target;
+                    p.classList.toggle("hidden", !isTarget);
+                    if (isTarget) typeCode(p);
                 });
             });
         });
+
+        // Trigger typing when section scrolls into view
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Type the first visible panel
+                        const active = viewer.querySelector<HTMLPreElement>(
+                            '[data-panel]:not(.hidden)'
+                        );
+                        if (active) typeCode(active);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.3 },
+        );
+        observer.observe(viewer);
     }
 </script>
