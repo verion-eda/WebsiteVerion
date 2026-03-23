@@ -125,26 +125,40 @@ sim.dump_waveform("alu_top.vcd")`,
 
             <!-- Code panels -->
             <div class="relative">
-                <pre
-                    data-panel="rust"
-                    data-full-code={code.rust}
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                <div data-panel="rust" data-full-code={code.rust} class="code-panel">
+                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.rust}</span></pre>
+                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                </div>
 
-                <pre
-                    data-panel="cpp"
-                    data-full-code={code.cpp}
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code></code><span class="typing-cursor">▌</span></pre>
+                <div data-panel="cpp" data-full-code={code.cpp} class="code-panel hidden">
+                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.cpp}</span></pre>
+                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                </div>
 
-                <pre
-                    data-panel="python"
-                    data-full-code={code.python}
-                    class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle hidden"><code></code><span class="typing-cursor">▌</span></pre>
+                <div data-panel="python" data-full-code={code.python} class="code-panel hidden">
+                    <pre class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle" aria-hidden="true"><span class="code-sizer">{code.python}</span></pre>
+                    <pre class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code></code><span class="typing-cursor">▌</span></pre>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <style>
+    .code-panel {
+        position: relative;
+    }
+    .code-sizer {
+        visibility: hidden;
+    }
+    .code-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+    }
     .typing-cursor {
         color: rgba(0, 212, 255, 0.8);
         animation: blink 0.6s step-end infinite;
@@ -160,11 +174,11 @@ sim.dump_waveform("alu_top.vcd")`,
     if (viewer) {
         const buttons =
             viewer.querySelectorAll<HTMLButtonElement>("[data-tab]");
-        const panels = viewer.querySelectorAll<HTMLPreElement>("[data-panel]");
+        const panels = viewer.querySelectorAll<HTMLDivElement>("[data-panel]");
 
         let currentAnim: number | null = null;
 
-        function typeCode(panel: HTMLPreElement) {
+        function typeCode(panel: HTMLDivElement) {
             // Cancel any running animation
             if (currentAnim !== null) {
                 cancelAnimationFrame(currentAnim);
@@ -172,8 +186,9 @@ sim.dump_waveform("alu_top.vcd")`,
             }
 
             const fullCode = panel.dataset.fullCode || "";
-            const codeEl = panel.querySelector("code")!;
-            const cursor = panel.querySelector(".typing-cursor") as HTMLElement;
+            const overlay = panel.querySelector(".code-overlay")!;
+            const codeEl = overlay.querySelector("code")!;
+            const cursor = overlay.querySelector(".typing-cursor") as HTMLElement;
 
             codeEl.textContent = "";
             if (cursor) cursor.style.display = "inline";
@@ -244,7 +259,7 @@ sim.dump_waveform("alu_top.vcd")`,
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         // Type the first visible panel
-                        const active = viewer.querySelector<HTMLPreElement>(
+                        const active = viewer.querySelector<HTMLDivElement>(
                             '[data-panel]:not(.hidden)'
                         );
                         if (active) typeCode(active);
