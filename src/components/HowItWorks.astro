@@ -1,0 +1,78 @@
+---
+// HowItWorks.astro
+
+const steps = [
+    {
+        number: "01",
+        title: "Compile",
+        description:
+            "Point Verion at your existing Verilog or SystemVerilog. The compiler analyzes your RTL and maps it onto GPU-optimized execution kernels. No rewriting required.",
+        icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>`,
+    },
+    {
+        number: "02",
+        title: "Distribute",
+        description:
+            "Verion partitions your design across available GPUs — on-premise or in the cloud. Testbenches and stimulus run in parallel across thousands of GPU cores.",
+        icon: `<rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>`,
+    },
+    {
+        number: "03",
+        title: "Simulate",
+        description:
+            "Run cycle-accurate simulation at 10-50x the speed of CPU tools. Get full waveform dumps, code coverage, and debug traces — no compromises.",
+        icon: `<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>`,
+    },
+];
+---
+
+<section class="py-40 px-8 lg:px-12 section-connector">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
+            >
+                How it works
+            </p>
+
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                From RTL to results<br />in three steps.
+            </h2>
+        </div>
+
+        <div class="mt-24 grid md:grid-cols-3 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow reveal">
+            {
+                steps.map((step, i) => (
+                    <div class={`bg-verion-bg p-8 md:p-10 card-glow relative reveal-delay-${i + 1}`}>
+                        <!-- Step connector arrow (between cards) -->
+                        {i < steps.length - 1 && (
+                            <div class="hidden md:block absolute top-1/2 -right-3 -translate-y-1/2 z-10 text-verion-accent/30">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <polyline points="9 18 15 12 9 6" />
+                                </svg>
+                            </div>
+                        )}
+
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-10 h-10 border border-verion-accent/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-verion-accent/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <Fragment set:html={step.icon} />
+                                </svg>
+                            </div>
+                            <span class="font-mono text-xs text-verion-accent/40">{step.number}</span>
+                        </div>
+
+                        <h3 class="font-mono text-sm text-verion-accent uppercase tracking-wide mb-4 text-glow-subtle">
+                            {step.title}
+                        </h3>
+                        <p class="text-sm text-verion-subtle leading-relaxed">
+                            {step.description}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

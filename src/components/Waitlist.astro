@@ -14,37 +14,126 @@
     </div>
 
     <div class="relative max-w-7xl mx-auto">
-        <div class="reveal">
-            <p
-                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
-            >
-                Get started
-            </p>
-
-            <h2
-                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading leading-tight tracking-tight max-w-3xl"
-            >
-                Run your next regression on <span
-                    class="text-verion-accent text-glow">Verion.</span
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+            <div class="reveal">
+                <p
+                    class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
                 >
-            </h2>
-            <p class="mt-6 text-verion-subtle max-w-md text-lg">
-                We're onboarding select design teams. Tell us about your
-                workload.
-            </p>
-        </div>
+                    Get started
+                </p>
 
-        <div class="mt-14 reveal">
-            <a
-                href="mailto:contact@verion-eda.com"
-                class="btn-neon group inline-flex items-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/40 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/80 transition-all duration-300"
-            >
-                contact@verion-eda.com
-                <span
-                    class="transition-transform duration-300 group-hover:translate-x-1"
-                    >&rarr;</span
+                <h2
+                    class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading leading-tight tracking-tight"
                 >
-            </a>
+                    Run your next regression on <span
+                        class="text-verion-accent text-glow">Verion.</span
+                    >
+                </h2>
+                <p class="mt-6 text-verion-subtle max-w-md text-lg">
+                    We're onboarding select design teams. Tell us about your
+                    workload and we'll schedule a call within 48 hours.
+                </p>
+            </div>
+
+            <form
+                action="https://formspree.io/f/YOUR_FORM_ID"
+                method="POST"
+                class="reveal border border-verion-accent/15 bg-verion-surface/50 p-8 md:p-10 border-glow"
+                id="contact-form"
+            >
+                <div class="space-y-6">
+                    <div>
+                        <label for="name" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            class="w-full bg-verion-bg border border-verion-border px-4 py-3 text-sm text-white placeholder-verion-muted/50 focus:border-verion-accent/60 focus:outline-none focus:ring-1 focus:ring-verion-accent/30 transition-colors"
+                            placeholder="Jane Smith"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="email" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Work email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="w-full bg-verion-bg border border-verion-border px-4 py-3 text-sm text-white placeholder-verion-muted/50 focus:border-verion-accent/60 focus:outline-none focus:ring-1 focus:ring-verion-accent/30 transition-colors"
+                            placeholder="jane@company.com"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="company" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Company</label>
+                        <input
+                            type="text"
+                            id="company"
+                            name="company"
+                            class="w-full bg-verion-bg border border-verion-border px-4 py-3 text-sm text-white placeholder-verion-muted/50 focus:border-verion-accent/60 focus:outline-none focus:ring-1 focus:ring-verion-accent/30 transition-colors"
+                            placeholder="Acme Semiconductors"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="message" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Tell us about your workload</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="3"
+                            class="w-full bg-verion-bg border border-verion-border px-4 py-3 text-sm text-white placeholder-verion-muted/50 focus:border-verion-accent/60 focus:outline-none focus:ring-1 focus:ring-verion-accent/30 transition-colors resize-none"
+                            placeholder="Design size, simulator you use today, pain points..."
+                        ></textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-neon w-full group inline-flex items-center justify-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/40 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/80 transition-all duration-300"
+                    >
+                        Request early access
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                    </button>
+                </div>
+
+                <p id="form-status" class="mt-4 text-sm font-mono text-center hidden"></p>
+            </form>
         </div>
     </div>
 </section>
+
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const status = document.getElementById("form-status")!;
+
+    form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+
+        try {
+            const res = await fetch(form.action, {
+                method: "POST",
+                body: new FormData(form),
+                headers: { Accept: "application/json" },
+            });
+
+            if (res.ok) {
+                status.textContent = "Thanks! We'll be in touch within 48 hours.";
+                status.className = "mt-4 text-sm font-mono text-center text-verion-accent text-glow-subtle";
+                form.reset();
+            } else {
+                status.textContent = "Something went wrong. Email us at contact@verion-eda.com";
+                status.className = "mt-4 text-sm font-mono text-center text-red-400";
+            }
+        } catch {
+            status.textContent = "Something went wrong. Email us at contact@verion-eda.com";
+            status.className = "mt-4 text-sm font-mono text-center text-red-400";
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = 'Request early access <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>';
+    });
+</script>

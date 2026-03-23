@@ -73,18 +73,82 @@
         </ul>
 
         <a
-            href="#waitlist"
+            href="mailto:contact@verion-eda.com"
             class="hidden md:inline-flex items-center text-sm text-verion-accent font-mono hover:text-verion-accent-bright transition-colors duration-300 text-glow-subtle"
         >
             Get in touch &rarr;
         </a>
 
-        <a
-            href="#waitlist"
-            class="md:hidden text-sm font-mono text-verion-accent text-glow-subtle"
+        <!-- Mobile hamburger -->
+        <button
+            id="mobile-menu-btn"
+            class="md:hidden flex flex-col gap-1.5 p-2"
+            aria-label="Open menu"
+            aria-expanded="false"
         >
-            Contact &rarr;
-        </a>
+            <span class="block w-5 h-px bg-verion-accent transition-all duration-300 origin-center" id="bar1"></span>
+            <span class="block w-5 h-px bg-verion-accent transition-all duration-300" id="bar2"></span>
+            <span class="block w-5 h-px bg-verion-accent transition-all duration-300 origin-center" id="bar3"></span>
+        </button>
     </nav>
     <div class="neon-line opacity-30"></div>
+
+    <!-- Mobile menu -->
+    <div
+        id="mobile-menu"
+        class="md:hidden hidden bg-verion-bg/95 backdrop-blur-xl border-b border-verion-accent/10"
+    >
+        <ul class="flex flex-col px-8 py-6 gap-6 text-sm">
+            <li>
+                <a href="#problem" class="text-verion-muted hover:text-verion-accent transition-colors duration-300 mobile-nav-link">Why Verion</a>
+            </li>
+            <li>
+                <a href="#product" class="text-verion-muted hover:text-verion-accent transition-colors duration-300 mobile-nav-link">Product</a>
+            </li>
+            <li>
+                <a href="#team" class="text-verion-muted hover:text-verion-accent transition-colors duration-300 mobile-nav-link">Team</a>
+            </li>
+            <li>
+                <a href="mailto:contact@verion-eda.com" class="text-verion-accent font-mono text-glow-subtle mobile-nav-link">Get in touch &rarr;</a>
+            </li>
+        </ul>
+    </div>
 </header>
+
+<script>
+    const btn = document.getElementById("mobile-menu-btn");
+    const menu = document.getElementById("mobile-menu");
+    const bar1 = document.getElementById("bar1");
+    const bar2 = document.getElementById("bar2");
+    const bar3 = document.getElementById("bar3");
+
+    let open = false;
+
+    btn?.addEventListener("click", () => {
+        open = !open;
+        menu?.classList.toggle("hidden", !open);
+        btn.setAttribute("aria-expanded", String(open));
+
+        if (open) {
+            bar1?.classList.add("translate-y-[4px]", "rotate-45");
+            bar2?.classList.add("opacity-0");
+            bar3?.classList.add("-translate-y-[4px]", "-rotate-45");
+        } else {
+            bar1?.classList.remove("translate-y-[4px]", "rotate-45");
+            bar2?.classList.remove("opacity-0");
+            bar3?.classList.remove("-translate-y-[4px]", "-rotate-45");
+        }
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+            open = false;
+            menu?.classList.add("hidden");
+            btn?.setAttribute("aria-expanded", "false");
+            bar1?.classList.remove("translate-y-[4px]", "rotate-45");
+            bar2?.classList.remove("opacity-0");
+            bar3?.classList.remove("-translate-y-[4px]", "-rotate-45");
+        });
+    });
+</script>
