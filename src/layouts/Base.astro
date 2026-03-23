@@ -79,6 +79,55 @@ const {
                 );
             }
 
+            /* ── Light trails (sporadic signals along grid lines) ── */
+            .light-trail {
+                position: fixed;
+                border-radius: 2px;
+                pointer-events: none;
+                z-index: 1;
+            }
+
+            .trail-h {
+                height: 1px;
+                width: 160px;
+                background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.7), transparent);
+                box-shadow: 0 0 8px rgba(0, 212, 255, 0.5), 0 0 24px rgba(0, 212, 255, 0.15);
+            }
+
+            /* Long total duration with idle gap — visible ~30% of the cycle */
+            .trail-h-1 { top: 25vh; animation: trailH 18s 0s linear infinite; }
+            .trail-h-2 { top: 65vh; animation: trailH 22s 8s linear infinite; }
+
+            .trail-v {
+                width: 1px;
+                height: 140px;
+                background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.7), transparent);
+                box-shadow: 0 0 8px rgba(0, 212, 255, 0.5), 0 0 24px rgba(0, 212, 255, 0.15);
+            }
+
+            .trail-v-1 { left: 30vw; animation: trailV 20s 4s linear infinite; }
+            .trail-v-2 { left: 72vw; animation: trailV 24s 14s linear infinite; }
+
+            @keyframes trailH {
+                0%   { left: -160px; opacity: 0; }
+                1%   { left: -160px; opacity: 0; }
+                3%   { opacity: 0.5; }
+                28%  { opacity: 0.5; }
+                30%  { left: 100vw; opacity: 0; }
+                31%  { left: -160px; opacity: 0; }
+                100% { left: -160px; opacity: 0; }
+            }
+
+            @keyframes trailV {
+                0%   { top: -140px; opacity: 0; }
+                1%   { top: -140px; opacity: 0; }
+                3%   { opacity: 0.5; }
+                28%  { opacity: 0.5; }
+                30%  { top: 100vh; opacity: 0; }
+                31%  { top: -140px; opacity: 0; }
+                100% { top: -140px; opacity: 0; }
+            }
+
             /* Scanline overlay */
             .scanline-overlay {
                 position: fixed;
@@ -211,7 +260,12 @@ const {
     </head>
     <body class="bg-verion-bg text-white antialiased relative">
         <!-- Tron grid background -->
-        <div class="tron-grid"></div>
+        <div class="tron-grid">
+            <div class="light-trail trail-h trail-h-1"></div>
+            <div class="light-trail trail-h trail-h-2"></div>
+            <div class="light-trail trail-v trail-v-1"></div>
+            <div class="light-trail trail-v trail-v-2"></div>
+        </div>
 
         <!-- Scanline effect -->
         <div class="scanline-overlay"></div>
