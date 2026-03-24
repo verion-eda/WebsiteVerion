@@ -1,0 +1,72 @@
+---
+// AgenticReady.astro
+
+const points = [
+    {
+        title: "Correctness at speed",
+        description:
+            "Agents need tight feedback loops. Verion returns simulation results fast enough for autonomous generate-test-fix cycles.",
+    },
+    {
+        title: "Programmatic by design",
+        description:
+            "Native Python, Rust, and C++ SDKs. No GUI, no TCL scripts. Agents interact through the same APIs your engineers use.",
+    },
+    {
+        title: "Observable for agents",
+        description:
+            "Cycle-accurate, full-visibility simulation. Agents get waveforms, coverage metrics, and assertion results — the same ground truth humans rely on.",
+    },
+    {
+        title: "Open, not opaque",
+        description:
+            "Legacy EDA tools are closed-source and undocumented, locking out agents. Verion exposes open interfaces — integrate with any agent framework, any LLM, any workflow.",
+    },
+];
+---
+
+<section id="agentic" class="py-28 px-8 lg:px-12 section-connector">
+    <div class="max-w-7xl mx-auto">
+        <div class="reveal">
+            <p
+                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
+            >
+                Agentic infrastructure
+            </p>
+
+            <h2
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
+            >
+                Built for agentic design.
+            </h2>
+            <p
+                class="mt-6 text-verion-subtle max-w-2xl leading-relaxed text-lg"
+            >
+                AI agents can write RTL. But they rely on tool usage to know if
+                it works. Verion closes the feedback loop — turning simulation
+                from a bottleneck into a real-time signal that agents can act
+                on.
+            </p>
+        </div>
+
+        <div
+            class="mt-20 grid md:grid-cols-2 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow reveal"
+        >
+            {
+                points.map((p, i) => (
+                    <div class="bg-verion-bg p-8 md:p-10 card-glow">
+                        <span class="font-mono text-xs text-verion-accent/40">
+                            {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h3 class="text-white font-medium mt-3 mb-3">
+                            {p.title}
+                        </h3>
+                        <p class="text-sm text-verion-muted leading-relaxed">
+                            {p.description}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
