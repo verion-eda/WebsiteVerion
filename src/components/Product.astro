@@ -14,8 +14,7 @@ const features = [
     },
     {
         title: "Coverage built in",
-        description:
-            "Code coverage metrics out of the box. No extra tooling.",
+        description: "Code coverage metrics out of the box. No extra tooling.",
     },
     {
         title: "Open ecosystem",
@@ -33,14 +32,34 @@ const integration = [
 const tableRows = [
     {
         metric: "Speed",
-        cpu: "Baseline",
+        cpu: "1x (Baseline)",
         fpga: "Fastest",
-        verion: "10x–50x faster",
+        verion: "10x–100x",
     },
-    { metric: "Compile time", cpu: "Fast", fpga: "Long", verion: "Fast" },
-    { metric: "On-premise", cpu: "Yes", fpga: "Yes", verion: "Yes" },
-    { metric: "Cloud scaling", cpu: "Limited", fpga: "Limited", verion: "Yes" },
-    { metric: "Cost", cpu: "Low", fpga: "Very high CapEx", verion: "OpEx only" },
+    {
+        metric: "Compile time",
+        cpu: "Minutes",
+        fpga: "Hours to days",
+        verion: "Minutes",
+    },
+    {
+        metric: "Cost",
+        cpu: "Low",
+        fpga: "Very high",
+        verion: "Medium",
+    },
+    {
+        metric: "RTL change turnaround",
+        cpu: "Fast",
+        fpga: "Moderate",
+        verion: "Fast",
+    },
+    {
+        metric: "Cloud scalability",
+        cpu: "Native",
+        fpga: "Limited",
+        verion: "Native",
+    },
 ];
 ---
 
