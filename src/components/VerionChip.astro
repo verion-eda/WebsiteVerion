@@ -52,6 +52,8 @@ const {
 </style>
 
 <script>
+  import { gsap } from 'gsap';
+
   (function () {
     const wrapper = document.querySelector('.tron-chip-wrapper') as HTMLElement | null;
     const canvas  = wrapper?.querySelector('.tron-chip-canvas') as HTMLCanvasElement | null;
@@ -61,7 +63,15 @@ const {
 
     const palette = { main: '#00d4ff', dim: '#002633' };
 
-    let mouse        = { x: -999, y: -999 };
+    // Cursor-proximity bloom is additive over the original cyan palette
+    const BLOOM_RADIUS = 170;
+
+    // Smooth mouse position (lerped via GSAP quickTo)
+    const smoothMouse = { x: -999, y: -999 };
+    const targetMouse = { x: -999, y: -999 };
+    const mouseToX = gsap.quickTo(smoothMouse, 'x', { duration: 0.35, ease: 'power3.out' });
+    const mouseToY = gsap.quickTo(smoothMouse, 'y', { duration: 0.35, ease: 'power3.out' });
+
     let particles: any[] = [];
     let scattered    = false;
     let scatterTimer = 0;
@@ -118,7 +128,7 @@ const {
     function initParticles() {
       const W     = canvas!.width;
       const H     = canvas!.height;
-      const scale = Math.min(W, H) / 600;
+      const scale = Math.min(W, H) / 420;
       const cx    = W / 2;
       const cy    = H / 2;
       const mask  = buildChipMask(cx, cy, scale);
@@ -162,7 +172,7 @@ const {
       if (scatterTimer === 0) scattered = false;
 
       const t     = frame * 0.02;
-      const scale = Math.min(W, H) / 600;
+      const scale = Math.min(W, H) / 420;
       const cx    = W / 2;
       const cy    = H / 2;
       const bw    = 200 * scale;
@@ -188,18 +198,6 @@ const {
         ctx!.beginPath(); ctx!.moveTo(bx + bw, py); ctx!.lineTo(bx + bw + 36 * scale, py); ctx!.stroke();
       }
 
-      if (mouse.x > 0) {
-        ctx!.beginPath();
-        ctx!.arc(mouse.x, mouse.y, 18, 0, Math.PI * 2);
-        ctx!.strokeStyle = palette.main + '88';
-        ctx!.lineWidth   = 1;
-        ctx!.stroke();
-        ctx!.beginPath();
-        ctx!.arc(mouse.x, mouse.y, 3, 0, Math.PI * 2);
-        ctx!.fillStyle = palette.main;
-        ctx!.fill();
-      }
-
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -208,35 +206,33 @@ const {
           p.vy += (p.ty - p.y) * 0.08;
         }
 
-        const mdx = p.x - mouse.x;
-        const mdy = p.y - mouse.y;
-        const md  = Math.sqrt(mdx * mdx + mdy * mdy);
-        const R   = 80;
-        if (md < R && md > 0) {
-          const f = (R - md) / R;
-          p.vx += (mdx / md) * f * 6;
-          p.vy += (mdy / md) * f * 6;
-        }
-
-        p.vx *= 0.75;
-        p.vy *= 0.75;
+        p.vx *= 0.78;
+        p.vy *= 0.78;
         p.x  += p.vx;
         p.y  += p.vy;
 
-        const pulse       = 0.6 + 0.4 * Math.sin(t * 2 + p.phase);
-        const distTarget  = Math.sqrt((p.x - p.tx) ** 2 + (p.y - p.ty) ** 2);
-        const settled     = Math.max(0, 1 - distTarget / 40);
-        const nearMouse   = md < 120 ? (1 - md / 120) : 0;
-        const pinFactor   = p.type === 'pin' ? 0.7 : 1;
-        const alpha       = Math.min(1, (p.bright * pulse * 0.5 + nearMouse * 0.5 + settled * 0.3) * pinFactor);
+        const mdx = p.x - smoothMouse.x;
+        const mdy = p.y - smoothMouse.y;
+        const md  = Math.sqrt(mdx * mdx + mdy * mdy);
+        const bloom = smoothMouse.x > 0 && md < BLOOM_RADIUS
+          ? Math.pow(1 - md / BLOOM_RADIUS, 1.8)
+          : 0;
+
+        const pulse      = 0.6 + 0.4 * Math.sin(t * 2 + p.phase);
+        const distTarget = Math.sqrt((p.x - p.tx) ** 2 + (p.y - p.ty) ** 2);
+        const settled    = Math.max(0, 1 - distTarget / 40);
+        const pinFactor  = p.type === 'pin' ? 0.7 : 1;
+        const alpha      = Math.min(1, (p.bright * pulse * 0.5 + bloom * 0.7 + settled * 0.3) * pinFactor);
 
         const hexA = Math.floor(alpha * 255).toString(16).padStart(2, '0');
         ctx!.fillStyle = palette.main + hexA;
         ctx!.font      = `${p.size}px monospace`;
         ctx!.fillText(p.char, p.x - p.size * 0.3, p.y + p.size * 0.35);
 
-        if (alpha > 0.7) {
-          const glowA = Math.floor(alpha * 60).toString(16).padStart(2, '0');
+        // Bloom glow layered on top of the existing cyan sparkle
+        const glowLevel = Math.max(alpha > 0.7 ? alpha * 0.24 : 0, bloom * 0.55);
+        if (glowLevel > 0.02) {
+          const glowA = Math.floor(Math.min(1, glowLevel) * 255).toString(16).padStart(2, '0');
           ctx!.fillStyle = palette.main + glowA;
           ctx!.font      = `${p.size * 1.6}px monospace`;
           ctx!.fillText(
@@ -248,29 +244,33 @@ const {
       }
     }
 
-    canvas.addEventListener('mousemove', e => {
+    // Track the page cursor globally so particles react wherever the cursor is on the hero
+    const setMouse = (clientX: number, clientY: number) => {
       const rect = canvas!.getBoundingClientRect();
-      mouse.x    = (e.clientX - rect.left) * (canvas!.width  / rect.width);
-      mouse.y    = (e.clientY - rect.top)  * (canvas!.height / rect.height);
-    });
+      const scaleX = canvas!.width / rect.width;
+      const scaleY = canvas!.height / rect.height;
+      targetMouse.x = (clientX - rect.left) * scaleX;
+      targetMouse.y = (clientY - rect.top) * scaleY;
+      mouseToX(targetMouse.x);
+      mouseToY(targetMouse.y);
+    };
 
-    canvas.addEventListener('mouseleave', () => {
-      mouse.x = -999;
-      mouse.y = -999;
-    });
+    const clearMouse = () => {
+      targetMouse.x = -999;
+      targetMouse.y = -999;
+      mouseToX(-999);
+      mouseToY(-999);
+    };
 
-    canvas.addEventListener('touchmove', e => {
-      e.preventDefault();
-      const rect  = canvas!.getBoundingClientRect();
+    window.addEventListener('mousemove', e => setMouse(e.clientX, e.clientY));
+    window.addEventListener('mouseout', e => {
+      if (!e.relatedTarget) clearMouse();
+    });
+    window.addEventListener('touchmove', e => {
       const touch = e.touches[0];
-      mouse.x     = (touch.clientX - rect.left) * (canvas!.width  / rect.width);
-      mouse.y     = (touch.clientY - rect.top)  * (canvas!.height / rect.height);
-    }, { passive: false });
-
-    canvas.addEventListener('touchend', () => {
-      mouse.x = -999;
-      mouse.y = -999;
-    });
+      if (touch) setMouse(touch.clientX, touch.clientY);
+    }, { passive: true });
+    window.addEventListener('touchend', clearMouse);
 
     wrapper.querySelector('#tron-scatter-btn')?.addEventListener('click', scatter);
 
