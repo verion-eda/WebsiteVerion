@@ -11,7 +11,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,6 +47,21 @@ const {
 
         <style is:global>
             /* ── Tron Ares global styles ── */
+
+            /* Lenis smooth scroll — disable native smooth behavior so Lenis owns it */
+            html.lenis,
+            html.lenis body {
+                height: auto;
+            }
+            .lenis.lenis-smooth {
+                scroll-behavior: auto !important;
+            }
+            .lenis.lenis-smooth [data-lenis-prevent] {
+                overscroll-behavior: contain;
+            }
+            .lenis.lenis-stopped {
+                overflow: clip;
+            }
 
             /* Perspective grid background */
             .tron-grid {
@@ -198,12 +213,44 @@ const {
         <script>
             import { gsap } from "gsap";
             import { ScrollTrigger } from "gsap/ScrollTrigger";
+            import Lenis from "lenis";
 
             gsap.registerPlugin(ScrollTrigger);
 
             const prefersReduced = window.matchMedia(
                 "(prefers-reduced-motion: reduce)",
             ).matches;
+
+            // Lenis smooth scroll — skipped for users who prefer reduced motion
+            let lenis: Lenis | null = null;
+            if (!prefersReduced) {
+                lenis = new Lenis({
+                    duration: 1.1,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    smoothWheel: true,
+                });
+
+                lenis.on("scroll", ScrollTrigger.update);
+
+                function raf(time: number) {
+                    lenis!.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+
+                // Route in-page anchor clicks through Lenis for smooth jumps
+                document.addEventListener("click", (e) => {
+                    const target = e.target as HTMLElement;
+                    const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
+                    if (!anchor) return;
+                    const href = anchor.getAttribute("href");
+                    if (!href || href === "#") return;
+                    const el = document.querySelector(href);
+                    if (!el) return;
+                    e.preventDefault();
+                    lenis!.scrollTo(el as HTMLElement, { offset: -64 });
+                });
+            }
 
             const reveals = gsap.utils.toArray<HTMLElement>(".reveal");
 
