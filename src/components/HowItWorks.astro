@@ -1,5 +1,5 @@
 ---
-// HowItWorks.astro
+// HowItWorks.astro — scrollytelling: pinned section with active-step progression
 
 const steps = [
     {
@@ -7,72 +7,396 @@ const steps = [
         title: "Compile",
         description:
             "Point Verion at your existing Verilog or SystemVerilog. The compiler analyzes your RTL and maps it onto GPU-optimized execution kernels. No rewriting required.",
-        icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>`,
     },
     {
         number: "02",
         title: "Distribute",
         description:
             "Verion partitions your design across available GPUs — on-premise or in the cloud. Testbenches and stimulus run in parallel across thousands of GPU cores.",
-        icon: `<rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>`,
     },
     {
         number: "03",
         title: "Simulate",
         description:
-            "Run cycle-accurate simulation at 10-50x the speed of CPU tools. Get full waveform dumps, code coverage, and debug traces — no compromises.",
-        icon: `<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>`,
+            "Run cycle-accurate simulation at 10–50× the speed of CPU tools. Full waveform dumps, code coverage, and debug traces — no compromises.",
     },
 ];
 ---
 
-<section id="how-it-works" class="py-28 px-8 lg:px-12 section-connector">
-    <div class="max-w-7xl mx-auto">
-        <div class="reveal">
-            <p
-                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
+<section id="how-it-works" class="section-connector">
+    <div
+        id="how-it-works-pin"
+        class="min-h-screen md:h-screen flex items-center px-8 lg:px-12 py-24 md:py-0"
+    >
+        <div
+            class="max-w-7xl mx-auto w-full grid md:grid-cols-[1fr_1.15fr] gap-16 lg:gap-20 items-center"
+        >
+            <!-- Left: label + headline + steps list -->
+            <div>
+                <p
+                    class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
+                >
+                    // How it works
+                </p>
+
+                <h2
+                    class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading leading-[1.05] tracking-tight mb-14 md:mb-16"
+                >
+                    From RTL to results<br />in three steps.
+                </h2>
+
+                <ol class="list-none m-0 p-0 space-y-8 md:space-y-10">
+                    {
+                        steps.map((step, i) => (
+                            <li
+                                class="hiw-step"
+                                data-step={i}
+                                data-active={i === 0 ? "true" : "false"}
+                            >
+                                <div class="flex items-start gap-5 md:gap-6">
+                                    <span class="font-mono text-xs text-verion-accent/50 pt-1.5 tabular-nums">
+                                        {step.number}
+                                    </span>
+                                    <div class="flex-1">
+                                        <h3 class="hiw-title font-mono text-base md:text-lg uppercase tracking-wider">
+                                            {step.title}
+                                        </h3>
+                                        <p class="text-sm text-verion-subtle leading-relaxed mt-2 max-w-md">
+                                            {step.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ol>
+            </div>
+
+            <!-- Right: pinned visual panel (hidden on mobile) -->
+            <div
+                class="hidden md:block relative h-[520px] border border-verion-accent/15 bg-verion-surface/40 border-glow overflow-hidden"
             >
-                How it works
-            </p>
-
-            <h2
-                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
-            >
-                From RTL to results<br />in three steps.
-            </h2>
-        </div>
-
-        <div class="mt-24 grid md:grid-cols-3 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow reveal">
-            {
-                steps.map((step, i) => (
-                    <div class={`bg-verion-bg p-8 md:p-10 card-glow relative reveal-delay-${i + 1}`}>
-                        <!-- Step connector arrow (between cards) -->
-                        {i < steps.length - 1 && (
-                            <div class="hidden md:block absolute top-1/2 -right-3 -translate-y-1/2 z-10 text-verion-accent/30">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <polyline points="9 18 15 12 9 6" />
-                                </svg>
-                            </div>
-                        )}
-
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="w-10 h-10 border border-verion-accent/20 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-verion-accent/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <Fragment set:html={step.icon} />
-                                </svg>
-                            </div>
-                            <span class="font-mono text-xs text-verion-accent/40">{step.number}</span>
+                <!-- Terminal title bar -->
+                <div
+                    class="flex items-center justify-between border-b border-verion-accent/10 bg-verion-bg/80 px-5 py-3"
+                >
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="w-2.5 h-2.5 rounded-full bg-verion-accent/30 border border-verion-accent/40"
+                        >
                         </div>
-
-                        <h3 class="font-mono text-sm text-verion-accent uppercase tracking-wide mb-4 text-glow-subtle">
-                            {step.title}
-                        </h3>
-                        <p class="text-sm text-verion-subtle leading-relaxed">
-                            {step.description}
-                        </p>
+                        <div
+                            class="w-2.5 h-2.5 rounded-full bg-verion-orange/20 border border-verion-orange/30"
+                        >
+                        </div>
+                        <div
+                            class="w-2.5 h-2.5 rounded-full bg-verion-amber/15 border border-verion-amber/25"
+                        >
+                        </div>
                     </div>
-                ))
-            }
+                    <span
+                        class="hiw-status font-mono text-[10px] text-verion-muted/60 uppercase tracking-widest"
+                    >
+                        verion — compile
+                    </span>
+                    <div class="w-16"></div>
+                </div>
+
+                <!-- Stacked visuals — only active one visible -->
+                <div class="absolute left-0 right-0 top-[43px] bottom-0">
+                    <!-- 01: Compile — Verilog source + lowering status -->
+                    <div
+                        class="hiw-visual absolute inset-0 p-6 md:p-8 font-mono text-[11px] md:text-xs leading-[1.7]"
+                        data-visual="0"
+                        data-active="true"
+                    >
+                        <div class="text-verion-muted/60 mb-3">// adder.v</div>
+                        <pre
+                            class="text-verion-subtle">module adder_8bit(
+  input  logic [7:0] a,
+  input  logic [7:0] b,
+  output logic [8:0] sum
+);
+
+  assign sum = a + b;
+
+endmodule</pre>
+                        <div
+                            class="mt-7 pl-3 border-l border-verion-accent/50 text-verion-accent text-glow-subtle"
+                        >
+                            ▸ Lowering RTL to GPU kernel<span
+                                class="hiw-blink">_</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 02: Distribute — GPU partitioning grid -->
+                    <div
+                        class="hiw-visual absolute inset-0 p-6 md:p-8"
+                        data-visual="1"
+                        data-active="false"
+                    >
+                        <div
+                            class="text-verion-muted/60 font-mono text-[11px] md:text-xs mb-4"
+                        >
+                            // partitioning across 16 devices
+                        </div>
+                        <div class="grid grid-cols-4 gap-1.5 max-w-[320px]">
+                            {
+                                Array.from({ length: 16 }).map((_, i) => (
+                                    <div
+                                        class="hiw-gpu aspect-square border border-verion-accent/20 flex items-center justify-center font-mono text-[9px] text-verion-accent/40"
+                                        style={`--gpu-delay: ${i * 0.05}s`}
+                                    >
+                                        GPU{String(i).padStart(2, "0")}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div
+                            class="mt-6 pl-3 border-l border-verion-accent/50 font-mono text-[11px] md:text-xs text-verion-accent text-glow-subtle"
+                        >
+                            ▸ 4096 cores allocated · 1.2M signals mapped
+                        </div>
+                    </div>
+
+                    <!-- 03: Simulate — waveform trace -->
+                    <div
+                        class="hiw-visual absolute inset-0 p-6 md:p-8 font-mono text-[11px] md:text-xs"
+                        data-visual="2"
+                        data-active="false"
+                    >
+                        <div class="text-verion-muted/60 mb-4">
+                            // simulation trace — t = 0 → 1.2 µs
+                        </div>
+                        <svg
+                            viewBox="0 0 360 180"
+                            class="w-full"
+                            stroke-linejoin="miter"
+                        >
+                            <!-- clk -->
+                            <text
+                                x="0"
+                                y="22"
+                                fill="#6b6b7b"
+                                font-size="10"
+                                font-family="JetBrains Mono">clk</text
+                            >
+                            <path
+                                d="M40 22 L60 22 L60 10 L80 10 L80 22 L100 22 L100 10 L120 10 L120 22 L140 22 L140 10 L160 10 L160 22 L180 22 L180 10 L200 10 L200 22 L220 22 L220 10 L240 10 L240 22 L260 22 L260 10 L280 10 L280 22 L300 22 L300 10 L320 10 L320 22 L340 22"
+                                stroke="#00d4ff"
+                                stroke-width="1.3"
+                                fill="none"></path>
+
+                            <!-- a -->
+                            <text
+                                x="0"
+                                y="66"
+                                fill="#6b6b7b"
+                                font-size="10"
+                                font-family="JetBrains Mono">a</text
+                            >
+                            <path
+                                d="M40 66 L120 66 L120 54 L200 54 L200 66 L280 66 L280 54 L340 54"
+                                stroke="#00d4ff"
+                                stroke-width="1.3"
+                                fill="none"></path>
+
+                            <!-- b -->
+                            <text
+                                x="0"
+                                y="110"
+                                fill="#6b6b7b"
+                                font-size="10"
+                                font-family="JetBrains Mono">b</text
+                            >
+                            <path
+                                d="M40 110 L80 110 L80 98 L160 98 L160 110 L240 110 L240 98 L340 98"
+                                stroke="#00d4ff"
+                                stroke-width="1.3"
+                                fill="none"></path>
+
+                            <!-- sum -->
+                            <text
+                                x="0"
+                                y="154"
+                                fill="#6b6b7b"
+                                font-size="10"
+                                font-family="JetBrains Mono">sum</text
+                            >
+                            <path
+                                d="M40 154 L80 154 L80 142 L120 142 L120 154 L160 154 L160 142 L200 142 L200 154 L240 154 L240 142 L280 142 L280 154 L320 154 L320 142 L340 142"
+                                stroke="#00d4ff"
+                                stroke-width="1.3"
+                                fill="none"></path>
+                        </svg>
+                        <div
+                            class="mt-5 pl-3 border-l border-verion-accent/50 text-verion-accent text-glow-subtle"
+                        >
+                            ▸ 42.1M cycles/s · coverage 97.4% · ✓ assertions
+                            pass
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress bar -->
+                <div
+                    class="absolute bottom-0 left-0 right-0 h-px bg-verion-accent/10"
+                >
+                    <div
+                        class="hiw-progress h-full bg-verion-accent origin-left"
+                        style="transform: scaleX(0);"
+                    >
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<style>
+    .hiw-step {
+        transition:
+            opacity 0.55s ease,
+            filter 0.55s ease;
+        opacity: 0.3;
+    }
+    .hiw-step[data-active="true"] {
+        opacity: 1;
+    }
+    .hiw-step .hiw-title {
+        color: #e0dde6;
+        transition:
+            color 0.55s ease,
+            text-shadow 0.55s ease;
+    }
+    .hiw-step[data-active="true"] .hiw-title {
+        color: #00d4ff;
+        text-shadow: 0 0 14px rgba(0, 212, 255, 0.22);
+    }
+
+    .hiw-visual {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+            opacity 0.6s ease,
+            transform 0.6s ease;
+        pointer-events: none;
+    }
+    .hiw-visual[data-active="true"] {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .hiw-blink {
+        animation: hiw-blink 0.7s step-end infinite;
+    }
+    @keyframes hiw-blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* GPU grid lights up in sequence when step 02 becomes active */
+    .hiw-visual[data-visual="1"][data-active="true"] .hiw-gpu {
+        animation: hiw-gpu-light 0.9s ease var(--gpu-delay) forwards;
+    }
+    @keyframes hiw-gpu-light {
+        0% {
+            border-color: rgba(0, 212, 255, 0.2);
+            color: rgba(0, 212, 255, 0.4);
+            background: transparent;
+        }
+        100% {
+            border-color: rgba(0, 212, 255, 0.55);
+            color: rgba(0, 212, 255, 0.95);
+            background: rgba(0, 212, 255, 0.07);
+        }
+    }
+
+    /* Fallback when JS is off: show everything at full opacity */
+    html.no-js .hiw-step {
+        opacity: 1;
+    }
+    html.no-js .hiw-visual {
+        opacity: 1;
+    }
+
+    /* Mobile: all steps visible, no dimming */
+    @media (max-width: 767px) {
+        .hiw-step {
+            opacity: 1;
+        }
+        .hiw-step .hiw-title {
+            color: #00d4ff;
+            text-shadow: 0 0 14px rgba(0, 212, 255, 0.22);
+        }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const section = document.getElementById("how-it-works");
+    const pin = document.getElementById("how-it-works-pin");
+
+    if (section && pin && !prefersReduced) {
+        const steps = section.querySelectorAll<HTMLElement>(".hiw-step");
+        const visuals = section.querySelectorAll<HTMLElement>(".hiw-visual");
+        const status = section.querySelector<HTMLElement>(".hiw-status");
+        const progressBar =
+            section.querySelector<HTMLElement>(".hiw-progress");
+
+        const statusLabels = [
+            "verion — compile",
+            "verion — distribute",
+            "verion — simulate",
+        ];
+
+        // Only pin on md+ viewports
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 768px)", () => {
+            const trigger = ScrollTrigger.create({
+                trigger: section,
+                start: "top top",
+                end: "+=2400",
+                pin: pin,
+                pinSpacing: true,
+                scrub: 0.6,
+                onUpdate: (self) => {
+                    // Clamp to [0,2]; boundaries at 1/3 and 2/3
+                    const p = self.progress;
+                    const idx = p < 1 / 3 ? 0 : p < 2 / 3 ? 1 : 2;
+
+                    steps.forEach((el, i) => {
+                        el.dataset.active = String(i === idx);
+                    });
+                    visuals.forEach((el, i) => {
+                        el.dataset.active = String(i === idx);
+                    });
+                    if (status) status.textContent = statusLabels[idx];
+                    if (progressBar) {
+                        progressBar.style.transform = `scaleX(${p})`;
+                    }
+                },
+            });
+
+            return () => {
+                trigger.kill();
+            };
+        });
+    }
+</script>
