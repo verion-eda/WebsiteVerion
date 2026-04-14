@@ -1,5 +1,6 @@
 ---
 // Hero.astro
+import VerionChip from "./VerionChip.astro";
 ---
 
 <section
@@ -66,51 +67,12 @@
                 </div>
             </div>
 
-            <!-- Right: Chip image -->
+            <!-- Right: Chip animation -->
             <div
                 class="relative animate-fade-in hidden md:block"
                 style="animation-delay: 0.3s;"
             >
-                <!-- Neon frame -->
-                <div
-                    class="relative border border-verion-accent/20 p-1"
-                >
-                    <!-- Inner glow overlay -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-verion-accent/5 via-transparent to-verion-orange/5 pointer-events-none z-10"
-                    >
-                    </div>
-
-                    <img
-                        src="/hero-chip.jpg"
-                        alt="Silicon chip die macro photograph"
-                        class="w-full h-auto object-cover grayscale-[50%] contrast-[1.05] brightness-[0.45] saturate-[0.6]"
-                    />
-
-                    <!-- Red tint overlay -->
-                    <div
-                        class="absolute inset-0 bg-verion-accent/15 mix-blend-overlay pointer-events-none"
-                    >
-                    </div>
-                </div>
-
-                <!-- Corner accents on frame -->
-                <div
-                    class="absolute -top-px -right-px w-8 h-px bg-gradient-to-l from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -top-px -right-px w-px h-8 bg-gradient-to-b from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -bottom-px -left-px w-8 h-px bg-gradient-to-r from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -bottom-px -left-px w-px h-8 bg-gradient-to-t from-verion-accent/60 to-transparent"
-                >
-                </div>
+                <VerionChip height="520px" />
             </div>
         </div>
     </div>
