@@ -163,26 +163,14 @@ const {
                 z-index: 100;
             }
 
-            /* Scroll-triggered fade-in */
+            /* Scroll-triggered reveal — initial state set here to prevent FOUC.
+               GSAP ScrollTrigger animates these to their final state. */
             .reveal {
                 opacity: 0;
-                transform: translateY(20px);
-                transition:
-                    opacity 0.7s ease-out,
-                    transform 0.7s ease-out;
+                will-change: transform, opacity, filter;
             }
-            .reveal.visible {
+            html.no-js .reveal {
                 opacity: 1;
-                transform: translateY(0);
-            }
-            .reveal-delay-1 {
-                transition-delay: 0.1s;
-            }
-            .reveal-delay-2 {
-                transition-delay: 0.2s;
-            }
-            .reveal-delay-3 {
-                transition-delay: 0.3s;
             }
 
             /* Neon glow card */
@@ -293,22 +281,49 @@ const {
         </div>
 
         <script>
-            // Intersection Observer for scroll reveal
-            const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("visible");
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                },
-                { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
-            );
+            import { gsap } from "gsap";
+            import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-            document
-                .querySelectorAll(".reveal")
-                .forEach((el) => observer.observe(el));
+            gsap.registerPlugin(ScrollTrigger);
+
+            const prefersReduced = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+
+            const reveals = gsap.utils.toArray<HTMLElement>(".reveal");
+
+            reveals.forEach((el) => {
+                // Honor legacy delay classes (reveal-delay-1 → 0.1s, etc.)
+                const delayMatch = el.className.match(/reveal-delay-(\d+)/);
+                const delay = delayMatch ? parseInt(delayMatch[1], 10) * 0.08 : 0;
+
+                gsap.fromTo(
+                    el,
+                    {
+                        opacity: 0,
+                        y: prefersReduced ? 0 : 48,
+                        filter: prefersReduced ? "none" : "blur(8px)",
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        duration: prefersReduced ? 0.3 : 1.1,
+                        delay,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 85%",
+                            toggleActions: "play none none none",
+                        },
+                    },
+                );
+            });
+
+            // Recalculate trigger positions once fonts have loaded
+            if (document.fonts?.ready) {
+                document.fonts.ready.then(() => ScrollTrigger.refresh());
+            }
         </script>
     </body>
 </html>
