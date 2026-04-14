@@ -15,7 +15,7 @@ const {
 <div class="tron-chip-wrapper" style={`width: ${width}; height: ${height}; position: relative; background: transparent; overflow: hidden;`}>
   {showControls && (
     <div class="tron-chip-ui">
-      <button class="tron-btn" id="tron-scatter-btn">SCATTER</button>
+      <button class="tron-btn" id="tron-scatter-btn">PULSE</button>
     </div>
   )}
   <canvas class="tron-chip-canvas" style="display:block; width:100%; height:100%;"></canvas>
@@ -61,205 +61,372 @@ const {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const palette = { main: '#00d4ff', dim: '#002633' };
+    const BASE = '0, 212, 255';
+    const WARM = '160, 240, 255';
+    const rgba = (c: string, a: number) => `rgba(${c}, ${a})`;
 
-    // Cursor-proximity bloom is additive over the original cyan palette
-    const BLOOM_RADIUS = 170;
+    const BLOOM_RADIUS = 200;
 
-    // Smooth mouse position (lerped via GSAP quickTo)
-    const smoothMouse = { x: -999, y: -999 };
-    const targetMouse = { x: -999, y: -999 };
+    const smoothMouse = { x: -9999, y: -9999 };
     const mouseToX = gsap.quickTo(smoothMouse, 'x', { duration: 0.35, ease: 'power3.out' });
     const mouseToY = gsap.quickTo(smoothMouse, 'y', { duration: 0.35, ease: 'power3.out' });
 
-    let particles: any[] = [];
-    let scattered    = false;
-    let scatterTimer = 0;
-    let frame        = 0;
-    let animId: number | null = null;
+    type Block = {
+      x: number; y: number; w: number; h: number;
+      cx: number; cy: number;
+      density: number; label: string;
+      dots: { x: number; y: number; phase: number; base: number }[];
+      activity: number;
+      phase: number;
+    };
 
-    const CHARS = ['0', '1', 'X', 'Z', '0', '1', '0', '1'];
+    type Pin = {
+      side: number;
+      x1: number; y1: number; x2: number; y2: number;
+      phase: number;
+    };
+
+    type Geo = {
+      pkg: { x: number; y: number; w: number; h: number; r: number };
+      die: { x: number; y: number; w: number; h: number; r: number };
+      blocks: Block[];
+      pins: Pin[];
+      fieldDots: { x: number; y: number; base: number; phase: number }[];
+      size: number;
+    };
+
+    let W = 0, H = 0, dpr = 1;
+    let geo: Geo | null = null;
+    let animId: number | null = null;
+    let running = false;
+    let lastActivity = 0;
+    const IDLE_MS = 1500;
 
     function resize() {
-      canvas!.width  = wrapper!.offsetWidth;
-      canvas!.height = wrapper!.offsetHeight;
-      initParticles();
+      dpr = window.devicePixelRatio || 1;
+      W = wrapper!.offsetWidth;
+      H = wrapper!.offsetHeight;
+      canvas!.width  = Math.floor(W * dpr);
+      canvas!.height = Math.floor(H * dpr);
+      canvas!.style.width  = W + 'px';
+      canvas!.style.height = H + 'px';
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      geo = buildGeometry();
     }
 
-    function buildChipMask(cx: number, cy: number, scale: number) {
-      const pts: { tx: number; ty: number; type: string }[] = [];
-      const bw = 200 * scale;
-      const bh = 220 * scale;
-      const bx = cx - bw / 2;
-      const by = cy - bh / 2;
-      const step = 7 * scale;
+    function buildGeometry(): Geo {
+      const size = Math.min(W, H) * 0.86;
+      const cx = W / 2;
+      const cy = H / 2;
 
-      for (let x = bx + step; x < bx + bw - step; x += step) {
-        for (let y = by + step; y < by + bh - step; y += step) {
-          pts.push({ tx: x, ty: y, type: 'body' });
+      const pkg = {
+        x: cx - size / 2,
+        y: cy - size / 2,
+        w: size,
+        h: size,
+        r: size * 0.035,
+      };
+
+      const dieInset = size * 0.11;
+      const die = {
+        x: pkg.x + dieInset,
+        y: pkg.y + dieInset,
+        w: pkg.w - dieInset * 2,
+        h: pkg.h - dieInset * 2,
+        r: size * 0.012,
+      };
+
+      // Functional blocks laid out to evoke a real die photograph:
+      // a large compute core, cache, IO, memory controller, DMA, PHY.
+      const rawBlocks = [
+        { nx: 0.03, ny: 0.03, nw: 0.54, nh: 0.55, density: 0.55, label: 'CORE' },
+        { nx: 0.61, ny: 0.03, nw: 0.36, nh: 0.26, density: 0.82, label: 'L2'   },
+        { nx: 0.61, ny: 0.32, nw: 0.36, nh: 0.26, density: 0.58, label: 'IO'   },
+        { nx: 0.03, ny: 0.62, nw: 0.28, nh: 0.35, density: 0.7,  label: 'MEM'  },
+        { nx: 0.34, ny: 0.62, nw: 0.24, nh: 0.35, density: 0.52, label: 'DMA'  },
+        { nx: 0.61, ny: 0.62, nw: 0.36, nh: 0.35, density: 0.62, label: 'PHY'  },
+      ];
+
+      const blocks: Block[] = rawBlocks.map(b => {
+        const x = die.x + b.nx * die.w;
+        const y = die.y + b.ny * die.h;
+        const w = b.nw * die.w;
+        const h = b.nh * die.h;
+        const step = Math.max(3.5, size * 0.014);
+        const dots: Block['dots'] = [];
+        for (let dx = step / 2; dx < w - step / 2; dx += step) {
+          for (let dy = step / 2; dy < h - step / 2; dy += step) {
+            if (Math.random() < b.density) {
+              dots.push({
+                x: x + dx + (Math.random() - 0.5) * 0.8,
+                y: y + dy + (Math.random() - 0.5) * 0.8,
+                phase: Math.random() * Math.PI * 2,
+                base: 0.2 + Math.random() * 0.55,
+              });
+            }
+          }
+        }
+        return {
+          x, y, w, h,
+          cx: x + w / 2,
+          cy: y + h / 2,
+          density: b.density,
+          label: b.label,
+          dots,
+          activity: 0,
+          phase: Math.random() * Math.PI * 2,
+        };
+      });
+
+      // Pins: 16 per side, thin, with short traces extending outside the package.
+      const pinsPerSide = 16;
+      const pinLen = size * 0.07;
+      const pinInset = size * 0.12;
+      const pins: Pin[] = [];
+      for (let side = 0; side < 4; side++) {
+        for (let i = 0; i < pinsPerSide; i++) {
+          const t = (i + 0.5) / pinsPerSide;
+          let x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+          if (side === 0) {
+            const px = pkg.x + pinInset + t * (pkg.w - pinInset * 2);
+            x1 = x2 = px;
+            y1 = pkg.y - pinLen;
+            y2 = pkg.y;
+          } else if (side === 1) {
+            const py = pkg.y + pinInset + t * (pkg.h - pinInset * 2);
+            x1 = pkg.x + pkg.w + pinLen;
+            x2 = pkg.x + pkg.w;
+            y1 = y2 = py;
+          } else if (side === 2) {
+            const px = pkg.x + pinInset + t * (pkg.w - pinInset * 2);
+            x1 = x2 = px;
+            y1 = pkg.y + pkg.h + pinLen;
+            y2 = pkg.y + pkg.h;
+          } else {
+            const py = pkg.y + pinInset + t * (pkg.h - pinInset * 2);
+            x1 = pkg.x - pinLen;
+            x2 = pkg.x;
+            y1 = y2 = py;
+          }
+          pins.push({ side, x1, y1, x2, y2, phase: Math.random() * Math.PI * 2 });
         }
       }
 
-      const numPins  = 8;
-      const pinGap   = 18 * scale;
-      const pinStart = by + 28 * scale;
-
-      for (let i = 0; i < numPins; i++) {
-        const py = pinStart + i * pinGap;
-        for (let px = bx - 36 * scale; px < bx; px += step) {
-          pts.push({ tx: px, ty: py, type: 'pin' });
-        }
-        for (let px = bx + bw; px < bx + bw + 36 * scale; px += step) {
-          pts.push({ tx: px, ty: py, type: 'pin' });
+      // Background field: faint grid dots outside the package
+      const fieldDots: Geo['fieldDots'] = [];
+      const fstep = Math.max(26, size * 0.06);
+      const pad = pinLen + 14;
+      for (let fx = fstep / 2; fx < W; fx += fstep) {
+        for (let fy = fstep / 2; fy < H; fy += fstep) {
+          const inside =
+            fx > pkg.x - pad && fx < pkg.x + pkg.w + pad &&
+            fy > pkg.y - pad && fy < pkg.y + pkg.h + pad;
+          if (inside) continue;
+          fieldDots.push({
+            x: fx + (Math.random() - 0.5) * 2,
+            y: fy + (Math.random() - 0.5) * 2,
+            base: 0.04 + Math.random() * 0.1,
+            phase: Math.random() * Math.PI * 2,
+          });
         }
       }
 
-      const notchCx = bx + 18 * scale;
-      const notchCy = by + 18 * scale;
-      const notchR  = 14 * scale;
-
-      return pts.filter(p => {
-        const dx = p.tx - notchCx;
-        const dy = p.ty - notchCy;
-        return Math.sqrt(dx * dx + dy * dy) > notchR;
-      });
+      return { pkg, die, blocks, pins, fieldDots, size };
     }
 
-    function initParticles() {
-      const W     = canvas!.width;
-      const H     = canvas!.height;
-      const scale = Math.min(W, H) / 420;
-      const cx    = W / 2;
-      const cy    = H / 2;
-      const mask  = buildChipMask(cx, cy, scale);
-
-      particles = mask.map(pt => ({
-        x:      pt.tx + (Math.random() - 0.5) * W * 0.8,
-        y:      pt.ty + (Math.random() - 0.5) * H * 0.8,
-        tx:     pt.tx,
-        ty:     pt.ty,
-        vx:     0,
-        vy:     0,
-        char:   CHARS[Math.floor(Math.random() * CHARS.length)],
-        size:   pt.type === 'pin'
-                  ? 7 * scale
-                  : (8 + Math.random() * 3) * scale,
-        phase:  Math.random() * Math.PI * 2,
-        bright: 0.3 + Math.random() * 0.7,
-        type:   pt.type,
-      }));
+    function bloom(x: number, y: number) {
+      if (smoothMouse.x < 0) return 0;
+      const dx = x - smoothMouse.x;
+      const dy = y - smoothMouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 > BLOOM_RADIUS * BLOOM_RADIUS) return 0;
+      const d = Math.sqrt(d2);
+      return Math.pow(1 - d / BLOOM_RADIUS, 1.8);
     }
 
-    function scatter() {
-      scattered    = true;
-      scatterTimer = 120;
-      particles.forEach(p => {
-        p.vx += (Math.random() - 0.5) * 18;
-        p.vy += (Math.random() - 0.5) * 18;
-      });
+    function roundRect(x: number, y: number, w: number, h: number, r: number) {
+      ctx!.beginPath();
+      ctx!.moveTo(x + r, y);
+      ctx!.arcTo(x + w, y, x + w, y + r, r);
+      ctx!.arcTo(x + w, y + h, x + w - r, y + h, r);
+      ctx!.arcTo(x, y + h, x, y + h - r, r);
+      ctx!.arcTo(x, y, x + r, y, r);
+      ctx!.closePath();
     }
 
-    function draw() {
-      animId = requestAnimationFrame(draw);
-      frame++;
-
-      const W = canvas!.width;
-      const H = canvas!.height;
-
+    function draw(now: number, intensity: number) {
+      if (!geo) return;
+      const t = now * 0.001;
       ctx!.clearRect(0, 0, W, H);
 
-      if (scatterTimer > 0) scatterTimer--;
-      if (scatterTimer === 0) scattered = false;
+      const { pkg, die, blocks, pins, fieldDots, size } = geo;
 
-      const t     = frame * 0.02;
-      const scale = Math.min(W, H) / 420;
-      const cx    = W / 2;
-      const cy    = H / 2;
-      const bw    = 200 * scale;
-      const bh    = 220 * scale;
-      const bx    = cx - bw / 2;
-      const by    = cy - bh / 2;
-
-      ctx!.strokeStyle = palette.main + '22';
-      ctx!.lineWidth   = 1;
-      ctx!.strokeRect(bx, by, bw, bh);
-
-      ctx!.beginPath();
-      ctx!.arc(bx + 18 * scale, by + 18 * scale, 14 * scale, 0, Math.PI * 2);
-      ctx!.stroke();
-
-      const numPins  = 8;
-      const pinGap   = 18 * scale;
-      const pinStart = by + 28 * scale;
-
-      for (let i = 0; i < numPins; i++) {
-        const py = pinStart + i * pinGap;
-        ctx!.beginPath(); ctx!.moveTo(bx - 36 * scale, py); ctx!.lineTo(bx, py); ctx!.stroke();
-        ctx!.beginPath(); ctx!.moveTo(bx + bw, py); ctx!.lineTo(bx + bw + 36 * scale, py); ctx!.stroke();
+      // Background field dots — sine modulation only scales with intensity
+      for (const d of fieldDots) {
+        const mod = 1 + 0.55 * Math.sin(t * 1.2 + d.phase) * intensity;
+        const b = bloom(d.x, d.y);
+        const a = Math.min(0.55, d.base * mod + b * 0.5);
+        ctx!.fillStyle = rgba(BASE, a);
+        ctx!.fillRect(d.x - 0.7, d.y - 0.7, 1.4, 1.4);
       }
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
+      // Pins
+      ctx!.lineCap = 'round';
+      ctx!.lineWidth = 1.3;
+      for (const p of pins) {
+        const bx = (p.x1 + p.x2) / 2;
+        const by = (p.y1 + p.y2) / 2;
+        const b = bloom(bx, by);
+        const mod = 1 + 0.3 * Math.sin(t * 1.8 + p.phase) * intensity;
+        const a = 0.42 * mod + b * 0.6;
+        ctx!.strokeStyle = rgba(BASE, a);
+        ctx!.beginPath();
+        ctx!.moveTo(p.x1, p.y1);
+        ctx!.lineTo(p.x2, p.y2);
+        ctx!.stroke();
+        // Contact pad at the package edge
+        ctx!.fillStyle = rgba(WARM, 0.55 + b * 0.45);
+        ctx!.fillRect(p.x2 - 1.2, p.y2 - 1.2, 2.4, 2.4);
+      }
 
-        if (!scattered) {
-          p.vx += (p.tx - p.x) * 0.08;
-          p.vy += (p.ty - p.y) * 0.08;
+      // Package outline — soft outer glow, then crisp stroke
+      ctx!.shadowColor = rgba(BASE, 0.55);
+      ctx!.shadowBlur = Math.max(8, size * 0.025);
+      ctx!.lineWidth = 1.8;
+      ctx!.strokeStyle = rgba(BASE, 0.9);
+      roundRect(pkg.x, pkg.y, pkg.w, pkg.h, pkg.r);
+      ctx!.stroke();
+      ctx!.shadowBlur = 0;
+
+      // Corner L-brackets (fiducials)
+      const cSize = size * 0.055;
+      const cOff = size * 0.02;
+      ctx!.lineWidth = 2;
+      ctx!.strokeStyle = rgba(WARM, 1);
+      const corners: [number, number, number, number][] = [
+        [pkg.x - cOff, pkg.y - cOff, 1, 1],
+        [pkg.x + pkg.w + cOff, pkg.y - cOff, -1, 1],
+        [pkg.x + pkg.w + cOff, pkg.y + pkg.h + cOff, -1, -1],
+        [pkg.x - cOff, pkg.y + pkg.h + cOff, 1, -1],
+      ];
+      for (const [bx, by, dx, dy] of corners) {
+        ctx!.beginPath();
+        ctx!.moveTo(bx, by + dy * cSize);
+        ctx!.lineTo(bx, by);
+        ctx!.lineTo(bx + dx * cSize, by);
+        ctx!.stroke();
+      }
+
+      // Pin-1 indicator dot
+      const p1r = Math.max(2, size * 0.009);
+      ctx!.fillStyle = rgba(WARM, 0.9);
+      ctx!.beginPath();
+      ctx!.arc(pkg.x + size * 0.05, pkg.y + size * 0.05, p1r, 0, Math.PI * 2);
+      ctx!.fill();
+
+      // Die outline + faint fill
+      ctx!.lineWidth = 1.2;
+      ctx!.strokeStyle = rgba(BASE, 0.55);
+      roundRect(die.x, die.y, die.w, die.h, die.r);
+      ctx!.fillStyle = rgba(BASE, 0.035);
+      ctx!.fill();
+      ctx!.stroke();
+
+      // Internal bus lanes — horizontal + vertical channels between blocks
+      ctx!.lineWidth = 0.8;
+      ctx!.strokeStyle = rgba(BASE, 0.22);
+      ctx!.setLineDash([4, 4]);
+      ctx!.beginPath();
+      // horizontal mid-bus (sits in the gap between top blocks and bottom blocks)
+      const hbY = die.y + die.h * 0.6;
+      ctx!.moveTo(die.x + die.w * 0.02, hbY);
+      ctx!.lineTo(die.x + die.w * 0.98, hbY);
+      // vertical bus between core and cache/io column
+      const vbX = die.x + die.w * 0.59;
+      ctx!.moveTo(vbX, die.y + die.h * 0.02);
+      ctx!.lineTo(vbX, die.y + die.h * 0.58);
+      // cache / io divider
+      const cacheDivY = die.y + die.h * 0.3;
+      ctx!.moveTo(die.x + die.w * 0.6, cacheDivY);
+      ctx!.lineTo(die.x + die.w * 0.98, cacheDivY);
+      ctx!.stroke();
+      ctx!.setLineDash([]);
+
+      // Functional blocks
+      for (const block of blocks) {
+        if (intensity > 0) block.phase += 0.013;
+        block.activity *= 0.965;
+
+        const cB = bloom(block.cx, block.cy);
+        const act = Math.min(1.2, block.activity + cB * 0.7);
+        const outlineA = 0.45 + 0.14 * Math.sin(block.phase) * intensity + act * 0.5;
+        const fillA = 0.045 + act * 0.07;
+
+        ctx!.fillStyle = rgba(BASE, fillA);
+        ctx!.fillRect(block.x, block.y, block.w, block.h);
+
+        ctx!.lineWidth = 1.1;
+        ctx!.strokeStyle = rgba(BASE, Math.min(1, outlineA));
+        ctx!.strokeRect(block.x, block.y, block.w, block.h);
+
+        for (const d of block.dots) {
+          const mod = 1 + 0.5 * Math.sin(t * 1.8 + d.phase) * intensity;
+          const dB = bloom(d.x, d.y);
+          const a = Math.min(1, d.base * mod + act * 0.45 + dB * 0.55);
+          ctx!.fillStyle = a > 0.75 ? rgba(WARM, a) : rgba(BASE, a);
+          ctx!.fillRect(d.x - 0.6, d.y - 0.6, 1.5, 1.5);
         }
 
-        p.vx *= 0.78;
-        p.vy *= 0.78;
-        p.x  += p.vx;
-        p.y  += p.vy;
-
-        const mdx = p.x - smoothMouse.x;
-        const mdy = p.y - smoothMouse.y;
-        const md  = Math.sqrt(mdx * mdx + mdy * mdy);
-        const bloom = smoothMouse.x > 0 && md < BLOOM_RADIUS
-          ? Math.pow(1 - md / BLOOM_RADIUS, 1.8)
-          : 0;
-
-        const pulse      = 0.6 + 0.4 * Math.sin(t * 2 + p.phase);
-        const distTarget = Math.sqrt((p.x - p.tx) ** 2 + (p.y - p.ty) ** 2);
-        const settled    = Math.max(0, 1 - distTarget / 40);
-        const pinFactor  = p.type === 'pin' ? 0.7 : 1;
-        const alpha      = Math.min(1, (p.bright * pulse * 0.5 + bloom * 0.7 + settled * 0.3) * pinFactor);
-
-        const hexA = Math.floor(alpha * 255).toString(16).padStart(2, '0');
-        ctx!.fillStyle = palette.main + hexA;
-        ctx!.font      = `${p.size}px monospace`;
-        ctx!.fillText(p.char, p.x - p.size * 0.3, p.y + p.size * 0.35);
-
-        // Bloom glow layered on top of the existing cyan sparkle
-        const glowLevel = Math.max(alpha > 0.7 ? alpha * 0.24 : 0, bloom * 0.55);
-        if (glowLevel > 0.02) {
-          const glowA = Math.floor(Math.min(1, glowLevel) * 255).toString(16).padStart(2, '0');
-          ctx!.fillStyle = palette.main + glowA;
-          ctx!.font      = `${p.size * 1.6}px monospace`;
-          ctx!.fillText(
-            p.char,
-            p.x - p.size * 0.3 - p.size * 0.15,
-            p.y + p.size * 0.35 + p.size * 0.15
-          );
+        // Block label — subtle, monospaced
+        if (block.w > 48 && block.h > 26) {
+          const fs = Math.max(9, size * 0.02);
+          ctx!.fillStyle = rgba(BASE, 0.65 + act * 0.35);
+          ctx!.font = `${fs}px "JetBrains Mono", monospace`;
+          ctx!.textBaseline = 'top';
+          ctx!.fillText(block.label, block.x + 6, block.y + 6);
         }
       }
     }
 
-    // Track the page cursor globally so particles react wherever the cursor is on the hero
+    function tick(now: number) {
+      const ageMs = now - lastActivity;
+      const raw = Math.max(0, 1 - ageMs / IDLE_MS);
+      const intensity = raw * raw * (3 - 2 * raw);
+      draw(now, intensity);
+      if (ageMs < IDLE_MS) {
+        animId = requestAnimationFrame(tick);
+      } else {
+        running = false;
+      }
+    }
+
+    function kick() {
+      lastActivity = performance.now();
+      if (!running) {
+        running = true;
+        animId = requestAnimationFrame(tick);
+      }
+    }
+
+    function kickScroll() {
+      if (geo) {
+        const b = geo.blocks[(Math.random() * geo.blocks.length) | 0];
+        b.activity = Math.min(1.3, b.activity + 0.8);
+      }
+      kick();
+    }
+
     const setMouse = (clientX: number, clientY: number) => {
       const rect = canvas!.getBoundingClientRect();
-      const scaleX = canvas!.width / rect.width;
-      const scaleY = canvas!.height / rect.height;
-      targetMouse.x = (clientX - rect.left) * scaleX;
-      targetMouse.y = (clientY - rect.top) * scaleY;
-      mouseToX(targetMouse.x);
-      mouseToY(targetMouse.y);
+      mouseToX(clientX - rect.left);
+      mouseToY(clientY - rect.top);
+      kick();
     };
 
     const clearMouse = () => {
-      targetMouse.x = -999;
-      targetMouse.y = -999;
-      mouseToX(-999);
-      mouseToY(-999);
+      mouseToX(-9999);
+      mouseToY(-9999);
+      kick();
     };
 
     window.addEventListener('mousemove', e => setMouse(e.clientX, e.clientY));
@@ -271,17 +438,23 @@ const {
       if (touch) setMouse(touch.clientX, touch.clientY);
     }, { passive: true });
     window.addEventListener('touchend', clearMouse);
+    window.addEventListener('scroll', kickScroll, { passive: true });
 
-    wrapper.querySelector('#tron-scatter-btn')?.addEventListener('click', scatter);
+    wrapper.querySelector('#tron-scatter-btn')?.addEventListener('click', () => {
+      if (!geo) return;
+      for (const b of geo.blocks) b.activity = 1;
+      kick();
+    });
 
     const ro = new ResizeObserver(() => {
       if (animId) cancelAnimationFrame(animId);
+      running = false;
       resize();
-      draw();
+      draw(performance.now(), 0);
     });
     ro.observe(wrapper);
 
     resize();
-    draw();
+    draw(performance.now(), 0);
   })();
 </script>
