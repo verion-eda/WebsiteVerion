@@ -1,0 +1,287 @@
+---
+interface Props {
+  width?: string;
+  height?: string;
+  showControls?: boolean;
+}
+
+const {
+  width = '100%',
+  height = '500px',
+  showControls = false,
+} = Astro.props;
+---
+
+<div class="tron-chip-wrapper" style={`width: ${width}; height: ${height}; position: relative; background: transparent; overflow: hidden;`}>
+  {showControls && (
+    <div class="tron-chip-ui">
+      <button class="tron-btn" id="tron-scatter-btn">SCATTER</button>
+    </div>
+  )}
+  <canvas class="tron-chip-canvas" style="display:block; width:100%; height:100%;"></canvas>
+</div>
+
+<style>
+  .tron-chip-wrapper * { box-sizing: border-box; }
+
+  .tron-chip-ui {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .tron-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    color: #00d4ff;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 12px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .tron-btn:hover {
+    background: rgba(0, 212, 255, 0.12);
+    border-color: #00d4ff;
+  }
+</style>
+
+<script>
+  (function () {
+    const wrapper = document.querySelector('.tron-chip-wrapper') as HTMLElement | null;
+    const canvas  = wrapper?.querySelector('.tron-chip-canvas') as HTMLCanvasElement | null;
+    if (!wrapper || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const palette = { main: '#00d4ff', dim: '#002633' };
+
+    let mouse        = { x: -999, y: -999 };
+    let particles: any[] = [];
+    let scattered    = false;
+    let scatterTimer = 0;
+    let frame        = 0;
+    let animId: number | null = null;
+
+    const CHARS = ['0', '1', 'X', 'Z', '0', '1', '0', '1'];
+
+    function resize() {
+      canvas!.width  = wrapper!.offsetWidth;
+      canvas!.height = wrapper!.offsetHeight;
+      initParticles();
+    }
+
+    function buildChipMask(cx: number, cy: number, scale: number) {
+      const pts: { tx: number; ty: number; type: string }[] = [];
+      const bw = 200 * scale;
+      const bh = 220 * scale;
+      const bx = cx - bw / 2;
+      const by = cy - bh / 2;
+      const step = 7 * scale;
+
+      for (let x = bx + step; x < bx + bw - step; x += step) {
+        for (let y = by + step; y < by + bh - step; y += step) {
+          pts.push({ tx: x, ty: y, type: 'body' });
+        }
+      }
+
+      const numPins  = 8;
+      const pinGap   = 18 * scale;
+      const pinStart = by + 28 * scale;
+
+      for (let i = 0; i < numPins; i++) {
+        const py = pinStart + i * pinGap;
+        for (let px = bx - 36 * scale; px < bx; px += step) {
+          pts.push({ tx: px, ty: py, type: 'pin' });
+        }
+        for (let px = bx + bw; px < bx + bw + 36 * scale; px += step) {
+          pts.push({ tx: px, ty: py, type: 'pin' });
+        }
+      }
+
+      const notchCx = bx + 18 * scale;
+      const notchCy = by + 18 * scale;
+      const notchR  = 14 * scale;
+
+      return pts.filter(p => {
+        const dx = p.tx - notchCx;
+        const dy = p.ty - notchCy;
+        return Math.sqrt(dx * dx + dy * dy) > notchR;
+      });
+    }
+
+    function initParticles() {
+      const W     = canvas!.width;
+      const H     = canvas!.height;
+      const scale = Math.min(W, H) / 600;
+      const cx    = W / 2;
+      const cy    = H / 2;
+      const mask  = buildChipMask(cx, cy, scale);
+
+      particles = mask.map(pt => ({
+        x:      pt.tx + (Math.random() - 0.5) * W * 0.8,
+        y:      pt.ty + (Math.random() - 0.5) * H * 0.8,
+        tx:     pt.tx,
+        ty:     pt.ty,
+        vx:     0,
+        vy:     0,
+        char:   CHARS[Math.floor(Math.random() * CHARS.length)],
+        size:   pt.type === 'pin'
+                  ? 7 * scale
+                  : (8 + Math.random() * 3) * scale,
+        phase:  Math.random() * Math.PI * 2,
+        bright: 0.3 + Math.random() * 0.7,
+        type:   pt.type,
+      }));
+    }
+
+    function scatter() {
+      scattered    = true;
+      scatterTimer = 120;
+      particles.forEach(p => {
+        p.vx += (Math.random() - 0.5) * 18;
+        p.vy += (Math.random() - 0.5) * 18;
+      });
+    }
+
+    function draw() {
+      animId = requestAnimationFrame(draw);
+      frame++;
+
+      const W = canvas!.width;
+      const H = canvas!.height;
+
+      ctx!.clearRect(0, 0, W, H);
+
+      if (scatterTimer > 0) scatterTimer--;
+      if (scatterTimer === 0) scattered = false;
+
+      const t     = frame * 0.02;
+      const scale = Math.min(W, H) / 600;
+      const cx    = W / 2;
+      const cy    = H / 2;
+      const bw    = 200 * scale;
+      const bh    = 220 * scale;
+      const bx    = cx - bw / 2;
+      const by    = cy - bh / 2;
+
+      ctx!.strokeStyle = palette.main + '22';
+      ctx!.lineWidth   = 1;
+      ctx!.strokeRect(bx, by, bw, bh);
+
+      ctx!.beginPath();
+      ctx!.arc(bx + 18 * scale, by + 18 * scale, 14 * scale, 0, Math.PI * 2);
+      ctx!.stroke();
+
+      const numPins  = 8;
+      const pinGap   = 18 * scale;
+      const pinStart = by + 28 * scale;
+
+      for (let i = 0; i < numPins; i++) {
+        const py = pinStart + i * pinGap;
+        ctx!.beginPath(); ctx!.moveTo(bx - 36 * scale, py); ctx!.lineTo(bx, py); ctx!.stroke();
+        ctx!.beginPath(); ctx!.moveTo(bx + bw, py); ctx!.lineTo(bx + bw + 36 * scale, py); ctx!.stroke();
+      }
+
+      if (mouse.x > 0) {
+        ctx!.beginPath();
+        ctx!.arc(mouse.x, mouse.y, 18, 0, Math.PI * 2);
+        ctx!.strokeStyle = palette.main + '88';
+        ctx!.lineWidth   = 1;
+        ctx!.stroke();
+        ctx!.beginPath();
+        ctx!.arc(mouse.x, mouse.y, 3, 0, Math.PI * 2);
+        ctx!.fillStyle = palette.main;
+        ctx!.fill();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        if (!scattered) {
+          p.vx += (p.tx - p.x) * 0.08;
+          p.vy += (p.ty - p.y) * 0.08;
+        }
+
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
+        const md  = Math.sqrt(mdx * mdx + mdy * mdy);
+        const R   = 80;
+        if (md < R && md > 0) {
+          const f = (R - md) / R;
+          p.vx += (mdx / md) * f * 6;
+          p.vy += (mdy / md) * f * 6;
+        }
+
+        p.vx *= 0.75;
+        p.vy *= 0.75;
+        p.x  += p.vx;
+        p.y  += p.vy;
+
+        const pulse       = 0.6 + 0.4 * Math.sin(t * 2 + p.phase);
+        const distTarget  = Math.sqrt((p.x - p.tx) ** 2 + (p.y - p.ty) ** 2);
+        const settled     = Math.max(0, 1 - distTarget / 40);
+        const nearMouse   = md < 120 ? (1 - md / 120) : 0;
+        const pinFactor   = p.type === 'pin' ? 0.7 : 1;
+        const alpha       = Math.min(1, (p.bright * pulse * 0.5 + nearMouse * 0.5 + settled * 0.3) * pinFactor);
+
+        const hexA = Math.floor(alpha * 255).toString(16).padStart(2, '0');
+        ctx!.fillStyle = palette.main + hexA;
+        ctx!.font      = `${p.size}px monospace`;
+        ctx!.fillText(p.char, p.x - p.size * 0.3, p.y + p.size * 0.35);
+
+        if (alpha > 0.7) {
+          const glowA = Math.floor(alpha * 60).toString(16).padStart(2, '0');
+          ctx!.fillStyle = palette.main + glowA;
+          ctx!.font      = `${p.size * 1.6}px monospace`;
+          ctx!.fillText(
+            p.char,
+            p.x - p.size * 0.3 - p.size * 0.15,
+            p.y + p.size * 0.35 + p.size * 0.15
+          );
+        }
+      }
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas!.getBoundingClientRect();
+      mouse.x    = (e.clientX - rect.left) * (canvas!.width  / rect.width);
+      mouse.y    = (e.clientY - rect.top)  * (canvas!.height / rect.height);
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      mouse.x = -999;
+      mouse.y = -999;
+    });
+
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const rect  = canvas!.getBoundingClientRect();
+      const touch = e.touches[0];
+      mouse.x     = (touch.clientX - rect.left) * (canvas!.width  / rect.width);
+      mouse.y     = (touch.clientY - rect.top)  * (canvas!.height / rect.height);
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => {
+      mouse.x = -999;
+      mouse.y = -999;
+    });
+
+    wrapper.querySelector('#tron-scatter-btn')?.addEventListener('click', scatter);
+
+    const ro = new ResizeObserver(() => {
+      if (animId) cancelAnimationFrame(animId);
+      resize();
+      draw();
+    });
+    ro.observe(wrapper);
+
+    resize();
+    draw();
+  })();
+</script>
