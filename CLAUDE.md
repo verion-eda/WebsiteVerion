@@ -22,7 +22,7 @@ No test suite or linter is configured.
 **Page structure:** Single page (`src/pages/index.astro`) assembles section components in order:
 `Nav → Hero → Problem → Product → CodeExample → Team → Waitlist → Footer`
 
-**Layout:** `src/layouts/Base.astro` provides the HTML shell, font loading (Inter, JetBrains Mono, Share Tech Mono via Google Fonts), global CSS (Tron/neon aesthetic with grid background, scanline overlay, glow effects), and an IntersectionObserver for `.reveal` scroll animations.
+**Layout:** `src/layouts/Base.astro` provides the HTML shell, font loading (Inter, JetBrains Mono via Google Fonts), global CSS (restrained dark theme with subtle grid background and muted cyan accent), and GSAP ScrollTrigger for `.reveal` scroll animations.
 
 **Styling:** Dark theme with custom `verion-*` color palette, neon glow effects, and custom animations defined in `tailwind.config.mjs`. Global utility classes (`card-glow`, `text-glow`, `btn-neon`, `neon-line`, `reveal`) are in `Base.astro`'s `<style>` block, not in separate CSS files.
 

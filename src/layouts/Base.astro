@@ -36,7 +36,7 @@ const {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Share+Tech+Mono&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
             rel="stylesheet"
         />
 
@@ -69,16 +69,15 @@ const {
                 bottom: 0;
                 background-image:
                     linear-gradient(
-                        rgba(0, 212, 255, 0.03) 1px,
+                        rgba(180, 200, 220, 0.018) 1px,
                         transparent 1px
                     ),
                     linear-gradient(
                         90deg,
-                        rgba(0, 212, 255, 0.03) 1px,
+                        rgba(180, 200, 220, 0.018) 1px,
                         transparent 1px
                     );
                 background-size: 80px 80px;
-                animation: gridScroll 30s linear infinite;
             }
 
             .tron-grid::after {
@@ -95,74 +94,6 @@ const {
                 );
             }
 
-            /* ── Light trails (sporadic signals along grid lines) ── */
-            .light-trail {
-                position: fixed;
-                border-radius: 2px;
-                pointer-events: none;
-                z-index: 1;
-                opacity: 0;
-            }
-
-            .trail-h {
-                height: 1px;
-                width: 160px;
-                background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.7), transparent);
-                box-shadow: 0 0 8px rgba(0, 212, 255, 0.5), 0 0 24px rgba(0, 212, 255, 0.15);
-            }
-
-            /* Long total duration with idle gap — visible ~30% of the cycle */
-            .trail-h-1 { top: 25vh; animation: trailH 18s 0s linear infinite; }
-            .trail-h-2 { top: 65vh; animation: trailH 22s 8s linear infinite; }
-
-            .trail-v {
-                width: 1px;
-                height: 140px;
-                background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.7), transparent);
-                box-shadow: 0 0 8px rgba(0, 212, 255, 0.5), 0 0 24px rgba(0, 212, 255, 0.15);
-            }
-
-            .trail-v-1 { left: 30vw; animation: trailV 20s 4s linear infinite; }
-            .trail-v-2 { left: 72vw; animation: trailV 24s 14s linear infinite; }
-
-            @keyframes trailH {
-                0%   { left: -160px; opacity: 0; }
-                1%   { left: -160px; opacity: 0; }
-                3%   { opacity: 0.5; }
-                28%  { opacity: 0.5; }
-                30%  { left: 100vw; opacity: 0; }
-                31%  { left: -160px; opacity: 0; }
-                100% { left: -160px; opacity: 0; }
-            }
-
-            @keyframes trailV {
-                0%   { top: -140px; opacity: 0; }
-                1%   { top: -140px; opacity: 0; }
-                3%   { opacity: 0.5; }
-                28%  { opacity: 0.5; }
-                30%  { top: 100vh; opacity: 0; }
-                31%  { top: -140px; opacity: 0; }
-                100% { top: -140px; opacity: 0; }
-            }
-
-            /* Scanline overlay */
-            .scanline-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(
-                    180deg,
-                    transparent,
-                    rgba(0, 212, 255, 0.06),
-                    transparent
-                );
-                animation: scanline 8s linear infinite;
-                pointer-events: none;
-                z-index: 100;
-            }
-
             /* Scroll-triggered reveal — initial state set here to prevent FOUC.
                GSAP ScrollTrigger animates these to their final state. */
             .reveal {
@@ -173,7 +104,7 @@ const {
                 opacity: 1;
             }
 
-            /* Neon glow card */
+            /* Subtle card hover */
             .card-glow {
                 position: relative;
                 transition:
@@ -183,56 +114,42 @@ const {
             }
             .card-glow:hover {
                 background-color: #0a0a0e;
-                box-shadow:
-                    0 0 20px rgba(0, 212, 255, 0.08),
-                    inset 0 0 30px rgba(0, 212, 255, 0.03);
+                border-color: rgba(0, 212, 255, 0.25);
             }
 
-            /* Neon text glow */
+            /* Text glow — reserved for hero headline only */
             .text-glow {
-                text-shadow:
-                    0 0 10px rgba(0, 212, 255, 0.5),
-                    0 0 40px rgba(0, 212, 255, 0.2),
-                    0 0 80px rgba(0, 212, 255, 0.1);
+                text-shadow: 0 0 24px rgba(0, 212, 255, 0.18);
             }
 
             .text-glow-subtle {
-                text-shadow:
-                    0 0 10px rgba(0, 212, 255, 0.3),
-                    0 0 30px rgba(0, 212, 255, 0.1);
+                text-shadow: none;
             }
 
-            /* Neon border */
+            /* Subtle border */
             .border-glow {
-                box-shadow:
-                    0 0 10px rgba(0, 212, 255, 0.15),
-                    inset 0 0 10px rgba(0, 212, 255, 0.05);
+                box-shadow: inset 0 0 0 1px rgba(0, 212, 255, 0.04);
             }
 
-            /* Neon button */
+            /* Button — clean hover */
             .btn-neon {
                 position: relative;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
             }
             .btn-neon:hover {
-                box-shadow:
-                    0 0 20px rgba(0, 212, 255, 0.4),
-                    0 0 60px rgba(0, 212, 255, 0.15),
-                    inset 0 0 20px rgba(0, 212, 255, 0.1);
+                background-color: rgba(0, 212, 255, 0.08);
+                border-color: rgba(0, 212, 255, 0.6);
             }
 
-            /* Horizontal neon line divider */
+            /* Horizontal line divider */
             .neon-line {
                 height: 1px;
                 background: linear-gradient(
                     90deg,
                     transparent,
-                    rgba(0, 212, 255, 0.5),
-                    rgba(0, 136, 255, 0.3),
-                    rgba(0, 212, 255, 0.5),
+                    rgba(0, 212, 255, 0.18),
                     transparent
                 );
-                box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
             }
 
             /* Section connector lines */
@@ -251,7 +168,7 @@ const {
                 background: linear-gradient(
                     90deg,
                     transparent,
-                    rgba(0, 212, 255, 0.4),
+                    rgba(0, 212, 255, 0.15),
                     transparent
                 );
             }
@@ -264,16 +181,8 @@ const {
         </style>
     </head>
     <body class="bg-verion-bg text-white antialiased relative">
-        <!-- Tron grid background -->
-        <div class="tron-grid">
-            <div class="light-trail trail-h trail-h-1"></div>
-            <div class="light-trail trail-h trail-h-2"></div>
-            <div class="light-trail trail-v trail-v-1"></div>
-            <div class="light-trail trail-v trail-v-2"></div>
-        </div>
-
-        <!-- Scanline effect -->
-        <div class="scanline-overlay"></div>
+        <!-- Subtle grid background -->
+        <div class="tron-grid"></div>
 
         <!-- Content -->
         <div class="relative z-10">
