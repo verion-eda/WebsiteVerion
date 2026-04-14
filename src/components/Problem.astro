@@ -76,27 +76,5 @@ const audiences = [
                 ))
             }
         </div>
-
-        <div class="mt-32 reveal">
-            <p
-                class="font-mono text-xs text-verion-muted uppercase tracking-widest mb-12"
-            >
-                Built for
-            </p>
-            <div class="grid md:grid-cols-3 gap-16">
-                {
-                    audiences.map((a) => (
-                        <div class="border-l border-verion-border hover:border-verion-accent/60 pl-6 transition-all duration-300 hover:shadow-neon-red">
-                            <h3 class="text-white font-medium mb-3">
-                                {a.label}
-                            </h3>
-                            <p class="text-sm text-verion-muted leading-relaxed">
-                                {a.description}
-                            </p>
-                        </div>
-                    ))
-                }
-            </div>
-        </div>
     </div>
 </section>
