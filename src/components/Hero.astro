@@ -1,9 +1,10 @@
 ---
 // Hero.astro
+import VerionChip from "./VerionChip.astro";
 ---
 
 <section
-    class="relative pt-48 pb-40 px-8 lg:px-12 section-connector overflow-hidden"
+    class="relative h-screen px-8 lg:px-12 pt-44 pb-16 section-connector overflow-hidden"
 >
     <!-- Ambient top glow -->
     <div
@@ -22,96 +23,53 @@
     >
     </div>
 
-    <div class="relative max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-            <!-- Left: Text content -->
-            <div>
-                <p
-                    class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-10 animate-fade-in text-glow-subtle"
-                >
-                    Now accepting design teams
-                </p>
+    <!-- Right: Chip animation — absolutely positioned, spans full section height -->
+    <div
+        class="absolute inset-y-0 right-12 w-[40%] hidden md:block animate-fade-in pointer-events-none"
+        style="animation-delay: 0.3s;"
+    >
+        <VerionChip width="100%" height="100%" />
+    </div>
 
-                <h1
-                    class="text-5xl md:text-6xl lg:text-7xl font-bold text-verion-heading leading-[1.02] tracking-tight animate-fade-in"
-                    style="animation-delay: 0.1s;"
-                >
-                    Silicon design,<br /><span
-                        class="text-verion-accent text-glow">accelerated.</span
-                    >
-                </h1>
-
-                <p
-                    class="mt-10 text-lg md:text-xl text-verion-subtle max-w-xl leading-relaxed animate-fade-in"
-                    style="animation-delay: 0.2s;"
-                >
-                    RTL regression in minutes, not days. Same Verilog. Same
-                    testbenches. 10&ndash;50x faster regressions.
-                </p>
-
-                <div
-                    class="mt-14 animate-fade-in"
-                    style="animation-delay: 0.3s;"
-                >
-                    <a
-                        href="#waitlist"
-                        class="btn-neon group inline-flex items-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/40 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/80 transition-all duration-300"
-                    >
-                        Request access
-                        <span
-                            class="transition-transform duration-300 group-hover:translate-x-1"
-                            >&rarr;</span
-                        >
-                    </a>
-                </div>
-            </div>
-
-            <!-- Right: Chip image -->
-            <div
-                class="relative animate-fade-in hidden md:block"
-                style="animation-delay: 0.3s;"
+    <!-- Left: Text content — normal flow, anchored near top -->
+    <div class="relative w-full max-w-7xl mx-auto">
+        <div class="max-w-[780px]">
+            <h1
+                class="hero-headline text-verion-heading animate-fade-in"
+                style="animation-delay: 0.1s;"
             >
-                <!-- Neon frame -->
-                <div
-                    class="relative border border-verion-accent/20 p-1"
+                Silicon design,<br /><span class="text-verion-accent text-glow"
+                    >accelerated.</span
                 >
-                    <!-- Inner glow overlay -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-verion-accent/5 via-transparent to-verion-orange/5 pointer-events-none z-10"
-                    >
-                    </div>
+            </h1>
 
-                    <img
-                        src="/hero-chip.jpg"
-                        alt="Silicon chip die macro photograph"
-                        class="w-full h-auto object-cover grayscale-[50%] contrast-[1.05] brightness-[0.45] saturate-[0.6]"
-                    />
-
-                    <!-- Red tint overlay -->
-                    <div
-                        class="absolute inset-0 bg-verion-accent/15 mix-blend-overlay pointer-events-none"
-                    >
-                    </div>
-                </div>
-
-                <!-- Corner accents on frame -->
-                <div
-                    class="absolute -top-px -right-px w-8 h-px bg-gradient-to-l from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -top-px -right-px w-px h-8 bg-gradient-to-b from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -bottom-px -left-px w-8 h-px bg-gradient-to-r from-verion-accent/60 to-transparent"
-                >
-                </div>
-                <div
-                    class="absolute -bottom-px -left-px w-px h-8 bg-gradient-to-t from-verion-accent/60 to-transparent"
-                >
-                </div>
-            </div>
+            <p
+                class="hero-subhead mt-8 text-verion-subtle animate-fade-in"
+                style="animation-delay: 0.2s;"
+            >
+                RTL regression in minutes, not days. Same Verilog. Same
+                testbenches. 10&ndash;50x faster regressions.
+            </p>
         </div>
     </div>
 </section>
+
+<style>
+    .hero-headline {
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 400;
+        font-size: clamp(2.5rem, 6vw, 5.75rem);
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+        white-space: nowrap;
+    }
+
+    .hero-subhead {
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.55;
+        letter-spacing: -0.01em;
+        max-width: 36rem;
+    }
+</style>

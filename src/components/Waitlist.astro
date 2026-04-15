@@ -19,7 +19,7 @@
                 <p
                     class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
                 >
-                    Get started
+                    // Get started
                 </p>
 
                 <h2
@@ -30,8 +30,8 @@
                     >
                 </h2>
                 <p class="mt-6 text-verion-subtle max-w-md text-lg">
-                    We're onboarding select design teams. Tell us about your
-                    workload and we'll schedule a call within 48 hours.
+                    Tell us about your workload and we'll schedule a call within
+                    48 hours.
                 </p>
             </div>
 
@@ -41,14 +41,31 @@
                 class="reveal border border-verion-accent/15 bg-verion-surface/50 p-8 md:p-10 border-glow"
                 id="contact-form"
             >
-                <input type="hidden" name="access_key" value="139492b4-1f67-435a-b92e-6092a9522d23" />
-                <input type="hidden" name="subject" value="New early access request — Verion EDA" />
+                <input
+                    type="hidden"
+                    name="access_key"
+                    value="139492b4-1f67-435a-b92e-6092a9522d23"
+                />
+                <input
+                    type="hidden"
+                    name="subject"
+                    value="New early access request — Verion EDA"
+                />
                 <input type="hidden" name="from_name" value="Verion Website" />
                 <!-- Honeypot spam trap — bots fill this, humans don't see it -->
-                <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+                <input
+                    type="checkbox"
+                    name="botcheck"
+                    class="hidden"
+                    style="display:none"
+                />
                 <div class="space-y-6">
                     <div>
-                        <label for="name" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Name</label>
+                        <label
+                            for="name"
+                            class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2"
+                            >Name</label
+                        >
                         <input
                             type="text"
                             id="name"
@@ -60,7 +77,11 @@
                     </div>
 
                     <div>
-                        <label for="email" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Work email</label>
+                        <label
+                            for="email"
+                            class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2"
+                            >Work email</label
+                        >
                         <input
                             type="email"
                             id="email"
@@ -72,7 +93,11 @@
                     </div>
 
                     <div>
-                        <label for="company" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Company</label>
+                        <label
+                            for="company"
+                            class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2"
+                            >Company</label
+                        >
                         <input
                             type="text"
                             id="company"
@@ -83,7 +108,11 @@
                     </div>
 
                     <div>
-                        <label for="message" class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2">Tell us about your workload</label>
+                        <label
+                            for="message"
+                            class="block font-mono text-xs text-verion-muted uppercase tracking-widest mb-2"
+                            >Tell us about your workload</label
+                        >
                         <textarea
                             id="message"
                             name="message"
@@ -98,11 +127,18 @@
                         class="btn-neon w-full group inline-flex items-center justify-center gap-3 font-mono text-sm text-verion-accent border border-verion-accent/40 px-7 py-3.5 hover:bg-verion-accent/10 hover:border-verion-accent/80 transition-all duration-300"
                     >
                         Request early access
-                        <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                        <span
+                            class="transition-transform duration-300 group-hover:translate-x-1"
+                            >&rarr;</span
+                        >
                     </button>
                 </div>
 
-                <p id="form-status" class="mt-4 text-sm font-mono text-center hidden"></p>
+                <p
+                    id="form-status"
+                    class="mt-4 text-sm font-mono text-center hidden"
+                >
+                </p>
             </form>
         </div>
     </div>
@@ -114,7 +150,9 @@
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+        const btn = form.querySelector(
+            "button[type=submit]",
+        ) as HTMLButtonElement;
         btn.disabled = true;
         btn.textContent = "Sending...";
 
@@ -126,19 +164,26 @@
             });
 
             if (res.ok) {
-                status.textContent = "Thanks! We'll be in touch within 48 hours.";
-                status.className = "mt-4 text-sm font-mono text-center text-verion-accent text-glow-subtle";
+                status.textContent =
+                    "Thanks! We'll be in touch within 48 hours.";
+                status.className =
+                    "mt-4 text-sm font-mono text-center text-verion-accent text-glow-subtle";
                 form.reset();
             } else {
-                status.textContent = "Something went wrong. Email us at contact@verion-eda.com";
-                status.className = "mt-4 text-sm font-mono text-center text-red-400";
+                status.textContent =
+                    "Something went wrong. Email us at contact@verion-eda.com";
+                status.className =
+                    "mt-4 text-sm font-mono text-center text-red-400";
             }
         } catch {
-            status.textContent = "Something went wrong. Email us at contact@verion-eda.com";
-            status.className = "mt-4 text-sm font-mono text-center text-red-400";
+            status.textContent =
+                "Something went wrong. Email us at contact@verion-eda.com";
+            status.className =
+                "mt-4 text-sm font-mono text-center text-red-400";
         }
 
         btn.disabled = false;
-        btn.innerHTML = 'Request early access <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>';
+        btn.innerHTML =
+            'Request early access <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>';
     });
 </script>
