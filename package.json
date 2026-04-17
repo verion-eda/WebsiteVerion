@@ -9,8 +9,8 @@
     "favicon": "magick -background none public/chipicon.svg -define icon:auto-resize=16,32,48 public/favicon.ico"
   },
   "dependencies": {
-    "@astrojs/tailwind": "^5.0.0",
-    "astro": "^4.0.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^6.1.7",
     "gsap": "^3.15.0",
     "lenis": "^1.3.21",
     "tailwindcss": "^3.4.0"
