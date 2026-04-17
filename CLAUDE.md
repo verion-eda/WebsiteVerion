@@ -11,6 +11,7 @@ Marketing/landing page for Verion EDA (verion-eda.com) — a GPU-accelerated RTL
 - `npm run dev` — Start dev server at http://localhost:4321
 - `npm run build` — Production build to `dist/`
 - `npm run preview` — Preview production build locally
+- `npm run favicon` — Regenerate `public/favicon.ico` from `public/chipicon.svg` (requires ImageMagick)
 - `nix develop` — Enter Nix dev shell (Node.js 22 + npm)
 
 No test suite or linter is configured.
@@ -28,6 +29,6 @@ No test suite or linter is configured.
 
 **Deployment:** GitHub Actions workflow (`.github/workflows/deploy.yml`) runs `npm ci && npm run build` and deploys `dist/` to GitHub Pages. Custom domain `verion-eda.com` via `public/CNAME`.
 
-**Static assets:** `public/` contains `chipicon.svg` (favicon), `hero-chip.jpg`, and `CNAME`.
+**Static assets:** `public/` contains `chipicon.svg` (SVG favicon source), `favicon.ico` (generated, Safari fallback), `apple-touch-icon.png`, `hero-chip.jpg`, and `CNAME`. The favicon link order in `Base.astro` is `.ico` → SVG → apple-touch-icon ("golden favicon" pattern) — Safari needs the `.ico` at the root to render the icon reliably.
 
 **Waitlist form:** `Waitlist.astro` uses Formspree — requires a form ID to be set in the action URL.

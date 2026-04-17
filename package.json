@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "favicon": "magick -background none public/chipicon.svg -define icon:auto-resize=16,32,48 public/favicon.ico"
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.0.0",

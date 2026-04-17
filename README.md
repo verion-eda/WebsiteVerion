@@ -51,6 +51,15 @@ In `Team.astro`, replace the initials `<div>` with:
 
 Drop photos in `/public/team/`.
 
+## Regenerating the favicon
+
+After editing `public/chipicon.svg`, rebuild `public/favicon.ico`:
+
+```bash
+brew install imagemagick  # one-time
+npm run favicon
+```
+
 ## Deploying (free)
 
 **Vercel:**
