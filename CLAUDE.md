@@ -31,4 +31,4 @@ No test suite or linter is configured.
 
 **Static assets:** `public/` contains `chipicon.svg` (SVG favicon source), `favicon.ico` (generated, Safari fallback), `apple-touch-icon.png`, `hero-chip.jpg`, and `CNAME`. The favicon link order in `Base.astro` is `.ico` → SVG → apple-touch-icon ("golden favicon" pattern) — Safari needs the `.ico` at the root to render the icon reliably.
 
-**Waitlist form:** `Waitlist.astro` uses Formspree — requires a form ID to be set in the action URL.
+**Waitlist form:** `Waitlist.astro` uses Web3Forms.
