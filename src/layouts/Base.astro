@@ -48,6 +48,13 @@ const {
         <style is:global>
             /* ── Tron Ares global styles ── */
 
+            /* Offset anchor jumps so they land below the fixed 64px nav.
+               Lenis re-applies its own offset when active; this is the fallback
+               for native scroll (touch devices, reduced motion). */
+            html {
+                scroll-padding-top: 64px;
+            }
+
             /* Lenis smooth scroll — disable native smooth behavior so Lenis owns it */
             html.lenis,
             html.lenis body {
@@ -127,7 +134,8 @@ const {
                     border-color 0.3s ease,
                     box-shadow 0.3s ease;
             }
-            .card-glow:hover {
+            .card-glow:hover,
+            .card-glow:active {
                 background-color: #0a0a0e;
                 border-color: rgba(0, 212, 255, 0.25);
             }
@@ -151,7 +159,8 @@ const {
                 position: relative;
                 transition: all 0.2s ease;
             }
-            .btn-neon:hover {
+            .btn-neon:hover,
+            .btn-neon:active {
                 background-color: rgba(0, 212, 255, 0.08);
                 border-color: rgba(0, 212, 255, 0.6);
             }
@@ -221,9 +230,13 @@ const {
                 "(prefers-reduced-motion: reduce)",
             ).matches;
 
-            // Lenis smooth scroll — skipped for users who prefer reduced motion
+            // Lenis smooth scroll — skipped for reduced motion and for touch /
+            // coarse-pointer devices, where native scroll feels more natural.
+            const isTouch = window.matchMedia(
+                "(hover: none), (pointer: coarse)",
+            ).matches;
             let lenis: Lenis | null = null;
-            if (!prefersReduced) {
+            if (!prefersReduced && !isTouch) {
                 lenis = new Lenis({
                     duration: 1.1,
                     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

@@ -121,7 +121,7 @@ sim.sync()`,
                     tabs.map((tab, i) => (
                         <button
                             data-tab={tab.toLowerCase().replace("++", "pp")}
-                            class={`px-6 py-4 font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
+                            class={`px-4 md:px-6 py-4 font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
                                 i === 0
                                     ? "text-verion-accent border-b-2 border-verion-accent -mb-px text-glow-subtle"
                                     : "text-verion-muted hover:text-verion-accent/70"
@@ -141,10 +141,10 @@ sim.sync()`,
                     class="code-panel"
                 >
                     <pre
-                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        class="p-4 md:p-10 overflow-x-auto text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"
                         aria-hidden="true"><span class="code-sizer">{code.rust}</span></pre>
                     <pre
-                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
+                        class="code-overlay p-4 md:p-10 text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
 
                 <div
@@ -153,10 +153,10 @@ sim.sync()`,
                     class="code-panel hidden"
                 >
                     <pre
-                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        class="p-4 md:p-10 overflow-x-auto text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"
                         aria-hidden="true"><span class="code-sizer">{code.cpp}</span></pre>
                     <pre
-                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
+                        class="code-overlay p-4 md:p-10 text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
 
                 <div
@@ -165,10 +165,10 @@ sim.sync()`,
                     class="code-panel hidden"
                 >
                     <pre
-                        class="p-6 md:p-10 overflow-x-auto text-sm font-mono leading-relaxed text-verion-subtle"
+                        class="p-4 md:p-10 overflow-x-auto text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"
                         aria-hidden="true"><span class="code-sizer">{code.python}</span></pre>
                     <pre
-                        class="code-overlay p-6 md:p-10 text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
+                        class="code-overlay p-4 md:p-10 text-xs md:text-sm font-mono leading-relaxed text-verion-subtle"><code /><span class="typing-cursor">▌</span></pre>
                 </div>
             </div>
         </div>

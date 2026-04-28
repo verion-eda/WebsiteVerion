@@ -26,7 +26,7 @@ const steps = [
 <section id="how-it-works" class="section-connector">
     <div
         id="how-it-works-pin"
-        class="min-h-screen md:h-screen flex items-center px-8 lg:px-12 py-24 md:py-0"
+        class="min-h-0 md:h-screen flex items-center px-8 lg:px-12 py-24 md:py-0"
     >
         <div
             class="max-w-7xl mx-auto w-full grid md:grid-cols-[1fr_1.15fr] gap-16 lg:gap-20 items-center"
@@ -64,6 +64,88 @@ const steps = [
                                         <p class="text-sm text-verion-subtle leading-relaxed mt-2 max-w-md">
                                             {step.description}
                                         </p>
+
+                                        {/* Mobile-only inline visual */}
+                                        <div class="md:hidden mt-5 border border-verion-accent/15 bg-verion-surface/40 overflow-hidden">
+                                            {i === 0 && (
+                                                <div class="p-4 font-mono text-[11px] leading-[1.7]">
+                                                    <div class="text-verion-muted/60 mb-2">
+                                                        // rv32i_core.sv
+                                                    </div>
+                                                    <pre class="text-verion-subtle overflow-x-auto">{`module rv32i_core(
+  input  logic        clk, rst_n,
+  input  logic [31:0] imem_rdata,
+  output logic [31:0] imem_addr,
+  // IF → ID → EX → MEM → WB
+endmodule`}</pre>
+                                                    <div class="mt-4 pl-3 border-l border-verion-accent/50 text-verion-accent text-glow-subtle">
+                                                        ▸ Lowering RTL to GPU kernel
+                                                        <span class="hiw-blink">_</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {i === 1 && (
+                                                <div class="p-4">
+                                                    <div class="text-verion-muted/60 font-mono text-[11px] mb-3">
+                                                        // partitioning across 16 devices
+                                                    </div>
+                                                    <div class="grid grid-cols-4 gap-1.5 max-w-[260px]">
+                                                        {Array.from({ length: 16 }).map((_, j) => (
+                                                            <div class="aspect-square border border-verion-accent/55 bg-verion-accent/[0.07] flex items-center justify-center font-mono text-[8px] text-verion-accent/95">
+                                                                GPU{String(j).padStart(2, "0")}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div class="mt-4 pl-3 border-l border-verion-accent/50 font-mono text-[11px] text-verion-accent text-glow-subtle">
+                                                        ▸ 4096 cores · 1.2M signals mapped
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {i === 2 && (
+                                                <div class="p-4 font-mono text-[11px]">
+                                                    <div class="text-verion-muted/60 mb-3">
+                                                        // simulation trace — t = 0 → 1.2 µs
+                                                    </div>
+                                                    <svg
+                                                        viewBox="0 0 360 180"
+                                                        class="w-full"
+                                                        stroke-linejoin="miter"
+                                                    >
+                                                        <text x="0" y="22" fill="#6b6b7b" font-size="13" font-family="JetBrains Mono">clk</text>
+                                                        <path
+                                                            d="M40 22 L60 22 L60 10 L80 10 L80 22 L100 22 L100 10 L120 10 L120 22 L140 22 L140 10 L160 10 L160 22 L180 22 L180 10 L200 10 L200 22 L220 22 L220 10 L240 10 L240 22 L260 22 L260 10 L280 10 L280 22 L300 22 L300 10 L320 10 L320 22 L340 22"
+                                                            stroke="#00d4ff"
+                                                            stroke-width="1.5"
+                                                            fill="none"
+                                                        />
+                                                        <text x="0" y="66" fill="#6b6b7b" font-size="13" font-family="JetBrains Mono">pc</text>
+                                                        <path
+                                                            d="M40 66 L120 66 L120 54 L200 54 L200 66 L280 66 L280 54 L340 54"
+                                                            stroke="#00d4ff"
+                                                            stroke-width="1.5"
+                                                            fill="none"
+                                                        />
+                                                        <text x="0" y="110" fill="#6b6b7b" font-size="13" font-family="JetBrains Mono">instr</text>
+                                                        <path
+                                                            d="M40 110 L80 110 L80 98 L160 98 L160 110 L240 110 L240 98 L340 98"
+                                                            stroke="#00d4ff"
+                                                            stroke-width="1.5"
+                                                            fill="none"
+                                                        />
+                                                        <text x="0" y="154" fill="#6b6b7b" font-size="13" font-family="JetBrains Mono">alu_y</text>
+                                                        <path
+                                                            d="M40 154 L80 154 L80 142 L120 142 L120 154 L160 154 L160 142 L200 142 L200 154 L240 154 L240 142 L280 142 L280 154 L320 154 L320 142 L340 142"
+                                                            stroke="#00d4ff"
+                                                            stroke-width="1.5"
+                                                            fill="none"
+                                                        />
+                                                    </svg>
+                                                    <div class="mt-3 pl-3 border-l border-verion-accent/50 text-verion-accent text-glow-subtle">
+                                                        ▸ 42.1M cycles/s · coverage 97.4%
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </li>

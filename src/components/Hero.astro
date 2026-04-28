@@ -4,7 +4,7 @@ import VerionChip from "./VerionChip.astro";
 ---
 
 <section
-    class="relative h-screen px-8 lg:px-12 pt-44 pb-16 section-connector overflow-hidden"
+    class="relative min-h-[100svh] md:h-screen px-8 lg:px-12 pt-32 md:pt-44 pb-16 section-connector overflow-hidden"
 >
     <!-- Ambient top glow -->
     <div
@@ -51,6 +51,15 @@ import VerionChip from "./VerionChip.astro";
                 testbenches. 10&ndash;50x faster regressions.
             </p>
         </div>
+
+        <!-- Mobile chip — visible below text on small screens -->
+        <div
+            class="md:hidden mt-12 max-w-xs mx-auto animate-fade-in pointer-events-none"
+            style="animation-delay: 0.3s;"
+            aria-hidden="true"
+        >
+            <VerionChip width="100%" height="100%" />
+        </div>
     </div>
 </section>
 
@@ -61,7 +70,12 @@ import VerionChip from "./VerionChip.astro";
         font-size: clamp(2.5rem, 6vw, 5.75rem);
         line-height: 1.04;
         letter-spacing: -0.035em;
-        white-space: nowrap;
+    }
+
+    @media (min-width: 768px) {
+        .hero-headline {
+            white-space: nowrap;
+        }
     }
 
     .hero-subhead {

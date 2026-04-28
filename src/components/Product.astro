@@ -88,54 +88,66 @@ const tableRows = [
         </div>
 
         <!-- Comparison table -->
-        <div
-            class="mt-24 border border-verion-accent/15 overflow-hidden border-glow reveal"
-        >
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr
-                            class="border-b border-verion-accent/10 bg-verion-surface/50"
-                        >
-                            <th
-                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
-                            ></th>
-                            <th
-                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
-                                >CPU Sim</th
+        <div class="mt-24 reveal">
+            <div
+                class="relative border border-verion-accent/15 overflow-hidden border-glow"
+            >
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr
+                                class="border-b border-verion-accent/10 bg-verion-surface/50"
                             >
-                            <th
-                                class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
-                                >FPGA</th
-                            >
-                            <th
-                                class="text-left px-6 py-5 font-mono text-xs text-verion-accent uppercase tracking-wider bg-verion-accent/5 text-glow-subtle"
-                                >Verion</th
-                            >
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            tableRows.map((row) => (
-                                <tr class="border-b border-verion-border/50 last:border-b-0 hover:bg-verion-accent/[0.02] transition-colors">
-                                    <td class="px-6 py-4 text-white font-medium">
-                                        {row.metric}
-                                    </td>
-                                    <td class="px-6 py-4 text-verion-muted">
-                                        {row.cpu}
-                                    </td>
-                                    <td class="px-6 py-4 text-verion-muted">
-                                        {row.fpga}
-                                    </td>
-                                    <td class="px-6 py-4 text-verion-accent font-mono bg-verion-accent/5">
-                                        {row.verion}
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                                <th
+                                    class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider sticky left-0 bg-verion-surface/95 z-10"
+                                ></th>
+                                <th
+                                    class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
+                                    >CPU Sim</th
+                                >
+                                <th
+                                    class="text-left px-6 py-5 font-mono text-xs text-verion-muted uppercase tracking-wider"
+                                    >FPGA</th
+                                >
+                                <th
+                                    class="text-left px-6 py-5 font-mono text-xs text-verion-accent uppercase tracking-wider bg-verion-accent/5 text-glow-subtle"
+                                    >Verion</th
+                                >
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                tableRows.map((row) => (
+                                    <tr class="border-b border-verion-border/50 last:border-b-0 hover:bg-verion-accent/[0.02] transition-colors">
+                                        <td class="px-6 py-4 text-white font-medium sticky left-0 bg-verion-bg z-10">
+                                            {row.metric}
+                                        </td>
+                                        <td class="px-6 py-4 text-verion-muted">
+                                            {row.cpu}
+                                        </td>
+                                        <td class="px-6 py-4 text-verion-muted">
+                                            {row.fpga}
+                                        </td>
+                                        <td class="px-6 py-4 text-verion-accent font-mono bg-verion-accent/5">
+                                            {row.verion}
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Mobile-only fade affordance on right edge -->
+                <div
+                    class="md:hidden pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-verion-bg to-transparent"
+                    aria-hidden="true"
+                ></div>
             </div>
+            <p
+                class="md:hidden text-xs text-verion-muted/60 font-mono mt-2"
+            >
+                // scroll →
+            </p>
         </div>
 
         <!-- Features -->
