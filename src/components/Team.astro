@@ -5,7 +5,7 @@ const team = [
     {
         name: "Daniel Kiesewalter",
         role: "Co-founder",
-        bio: "Ex-Sony AI for chip design. Deep knowledge in hardware design and machine learning.",
+        bio: "Trained LLMs that generate chip designs and surrogate models that outrun simulation at SonyAI. Built mythen, the fastes-accelerating race-car at AM. Designed the fastest electro-optic modulators at Polariton.",
         initials: "DK",
         linkedin: "https://www.linkedin.com/in/dakies/",
     },
@@ -22,55 +22,47 @@ const team = [
 <section id="team" class="py-28 px-8 lg:px-12 section-connector">
     <div class="max-w-7xl mx-auto">
         <div class="reveal">
-            <p
-                class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle"
-            >
+            <p class="font-mono text-xs text-verion-accent uppercase tracking-widest mb-6 text-glow-subtle">
                 // Team
             </p>
 
-            <h2
-                class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight"
-            >
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-verion-heading max-w-3xl leading-tight tracking-tight">
                 We know the verification bottleneck firsthand.
             </h2>
         </div>
 
-        <div
-            class="mt-20 grid md:grid-cols-2 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow max-w-3xl reveal"
-        >
-            {
-                team.map((member) => (
-                    <div class="bg-verion-bg p-8 md:p-10 card-glow">
-                        <div class="w-12 h-12 border border-verion-accent/20 flex items-center justify-center font-mono text-xs text-verion-accent/60 mb-6">
-                            {member.initials}
-                        </div>
-                        <h3 class="text-white font-medium text-lg">
-                            {member.name}
-                        </h3>
-                        <p class="font-mono text-xs text-verion-accent mt-1.5 mb-3 text-glow-subtle">
-                            {member.role}
-                        </p>
-                        <p class="text-sm text-verion-muted leading-relaxed mb-5">
-                            {member.bio}
-                        </p>
-                        <a
-                            href={member.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-flex items-center gap-2 text-xs font-mono text-verion-muted hover:text-verion-accent transition-colors duration-300"
-                        >
-                            <svg
-                                class="w-4 h-4"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
+        <div class="mt-20 grid md:grid-cols-2 gap-px bg-verion-border/50 border border-verion-accent/10 border-glow max-w-3xl reveal">
+            {team.map((member) => (
+                <div class="bg-verion-bg p-8 md:p-10 card-glow">
+                    <div class="w-12 h-12 border border-verion-accent/20 flex items-center justify-center font-mono text-xs text-verion-accent/60 mb-6">
+                        {member.initials}
                     </div>
-                ))
-            }
+                    <h3 class="text-white font-medium text-lg">
+                        {member.name}
+                    </h3>
+                    <p class="font-mono text-xs text-verion-accent mt-1.5 mb-3 text-glow-subtle">
+                        {member.role}
+                    </p>
+                    <p class="text-sm text-verion-muted leading-relaxed mb-5">
+                        {member.bio}
+                    </p>
+                    <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 text-xs font-mono text-verion-muted hover:text-verion-accent transition-colors duration-300"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                        >
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        LinkedIn
+                    </a>
+                </div>
+            ))}
         </div>
     </div>
 </section>
