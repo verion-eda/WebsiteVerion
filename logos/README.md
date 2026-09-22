@@ -9,21 +9,25 @@ The mark is a **Möbius band built from signal lines**, like the parallel traces
 - **Asymmetry** — one lobe is larger and the half-twist sits on one side. The loop reads as moving and evolving, not static.
 - **Highlighted signal trace** — one trace is lit in the accent cyan. It is the signal being followed around the loop. Later it can become an animated pulse.
 
+##
+
+Organic slow movement, warping of structure; Signals - glows - wizzing along its path.
+
 ## Concepts in this folder
 
 These are explorations, not a final logo. Each has a `-dark` and a `-light` SVG (512×512).
 
-| Folder | Direction |
-| --- | --- |
-| `1a-ribbon` | Solid ribbon, baseline Möbius form |
-| `1b-bus` | Band split into bus traces |
-| `1c-sampling` | Sampled / discretised surface |
-| `1d-edge` | Edges only |
-| `2a-bus-3` | Three bold traces, signal in the middle |
-| `2b-bus-fine` | Eight fine traces, uneven pitch |
-| `2c-bus-graded` | Bus with colour grading across traces |
-| `2e-edge-lit` | Glowing edges, Tron-style (static stand-in for animation) |
-| `2f-pulse` | Signal pulse along the band (static stand-in for animation) |
+| Folder          | Direction                                                   |
+| --------------- | ----------------------------------------------------------- |
+| `1a-ribbon`     | Solid ribbon, baseline Möbius form                          |
+| `1b-bus`        | Band split into bus traces                                  |
+| `1c-sampling`   | Sampled / discretised surface                               |
+| `1d-edge`       | Edges only                                                  |
+| `2a-bus-3`      | Three bold traces, signal in the middle                     |
+| `2b-bus-fine`   | Eight fine traces, uneven pitch                             |
+| `2c-bus-graded` | Bus with colour grading across traces                       |
+| `2e-edge-lit`   | Glowing edges, Tron-style (static stand-in for animation)   |
+| `2f-pulse`      | Signal pulse along the band (static stand-in for animation) |
 
 The bus family (1b, 2a–2c) and the edge-lit family (2e, 2f) are currently the most promising. A planned next step is animating glowing splines moving along the band.
 
