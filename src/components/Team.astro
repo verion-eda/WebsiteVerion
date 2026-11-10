@@ -5,14 +5,23 @@ const team = [
     {
         name: "Daniel Kiesewalter",
         role: "Co-founder",
-        bio: "Trained LLMs that generate chip designs and surrogate models that outrun simulation at SonyAI. Built mythen, the fastes-accelerating race-car at AM. Designed the fastest electro-optic modulators at Polariton.",
+        bio: [
+            "ETH MSc in EE, specialising in ML and signal processing",
+            "Sony, AI for chip design — trained LLMs for RTL generation, device simulation and optimisation",
+            "Built electronics and led the control team for AMZ’s mythen, the 0⁠–⁠100 km/h world-record race car",
+            "Designed photonic chips at Polariton (now Marvell)",
+        ],
         initials: "DK",
         linkedin: "https://www.linkedin.com/in/dakies/",
     },
     {
         name: "Yves Ineichen",
         role: "Co-founder",
-        bio: "ACM Gordon Bell Prize winner. Expert in high-performance computing and distributed systems.",
+        bio: [
+            "ETH Zurich PhD in High-Performance Computing, then IBM Research, scaling numerical algorithms across large clusters",
+            "Gordon Bell Prize, supercomputing’s top award (2015, for a simulation of Earth’s mantle)",
+            "8 years as Principal Deep Learning Engineer at PTC — accelerated CV training and inference",
+        ],
         initials: "YI",
         linkedin: "https://www.linkedin.com/in/yvesineichen/",
     },
@@ -43,9 +52,11 @@ const team = [
                     <p class="font-mono text-xs text-verion-accent mt-1.5 mb-3 text-glow-subtle">
                         {member.role}
                     </p>
-                    <p class="text-sm text-verion-muted leading-relaxed mb-5">
-                        {member.bio}
-                    </p>
+                    <ul class="text-sm text-verion-muted leading-relaxed mb-5 space-y-2 list-disc pl-4 marker:text-verion-accent/40">
+                        {member.bio.map((item) => (
+                            <li>{item}</li>
+                        ))}
+                    </ul>
                     <a
                         href={member.linkedin}
                         target="_blank"
